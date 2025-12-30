@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "worker:build": "npx opennextjs-cloudflare build",
-    "deploy": "npm run worker:build && npx opennextjs-cloudflare deploy",
+    "deploy": "npm run worker:build && npx opennextjs-cloudflare deploy --skip-cache",
     "pages:build": "npx @cloudflare/next-on-pages",
     "start": "next start",
     "lint": "eslint"
