@@ -57,23 +57,23 @@ export default function Works() {
     }, [mouseX, mouseY])
 
     return (
-        <section id="works" className="w-full pb-32 px-6 md:px-12 bg-background relative z-20">
+        <section id="works" className="w-full pb-32 px-6 lg:px-[60px] bg-background relative z-20">
             <div className="flex flex-col mb-12 mt-20">
                 <h2 className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-4">
                     Selected Works
                 </h2>
             </div>
 
-            <div className="flex flex-col border-t border-white/10">
+            <div className="flex flex-col border-t border-white/20">
                 {projects.map((project) => (
                     <div
                         key={project.id}
-                        className="group relative flex flex-col md:flex-row justify-between items-start md:items-center py-12 md:py-16 border-b border-white/10 transition-colors cursor-pointer"
+                        className="group relative flex flex-col md:flex-row justify-between items-start md:items-center py-[45px] border-b border-white/20 transition-colors cursor-pointer"
                         onMouseEnter={() => setHoveredProject(project.id)}
                         onMouseLeave={() => setHoveredProject(null)}
                     >
                         <div className="flex flex-col gap-2 relative z-10 transition-transform duration-500 ease-out group-hover:translate-x-4">
-                            <h3 className="text-5xl md:text-7xl font-bold uppercase tracking-tighter text-white group-hover:text-muted-foreground transition-colors">
+                            <h3 className="text-4xl md:text-5xl lg:text-[60px] font-bold uppercase tracking-tighter text-white group-hover:text-muted-foreground transition-colors">
                                 {project.title}
                             </h3>
                             <span className="text-xs md:text-sm text-muted-foreground uppercase tracking-wider">

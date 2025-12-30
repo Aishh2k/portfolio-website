@@ -5,8 +5,8 @@ import { Asterisk } from "lucide-react"
 
 export default function Hero() {
     return (
-        <section className="h-screen w-full flex flex-col justify-between p-6 md:p-12 md:pb-12 relative overflow-hidden bg-background">
-            {/* Top Bar: Name & Menu (Menu placeholder) */}
+        <section className="h-screen w-full flex flex-col justify-between py-12 px-6 lg:px-[60px] relative overflow-hidden bg-background">
+            {/* Top Bar: Name & Menu */}
             <div className="flex items-center justify-between w-full z-10">
                 <div className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
                     Aiswarya Jayachandran
@@ -16,13 +16,13 @@ export default function Hero() {
                 </div>
             </div>
 
-            {/* Main Typography */}
-            <div className="flex flex-col z-10 mt-20 md:mt-0 items-center md:items-start w-full">
+            {/* Main Typography - Centered Vertically */}
+            <div className="flex flex-col z-10 items-center md:items-start w-full absolute top-1/2 left-0 -translate-y-1/2 px-6 lg:px-[60px]">
                 <motion.h1
                     initial={{ y: 100, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="text-[14vw] md:text-[120px] leading-[0.85] font-bold uppercase tracking-tighter text-white"
+                    className="text-[14vw] lg:text-[120px] leading-[0.85] lg:leading-[120px] font-bold uppercase tracking-tighter text-white"
                 >
                     Frontend
                 </motion.h1>
@@ -30,21 +30,21 @@ export default function Hero() {
                     initial={{ y: 100, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                    className="text-[14vw] md:text-[120px] leading-[0.85] font-bold uppercase tracking-tighter text-white ml-[0] md:ml-32"
+                    className="text-[14vw] lg:text-[120px] leading-[0.85] lg:leading-[120px] font-bold uppercase tracking-tighter text-white ml-0 lg:ml-[40px]"
                 >
                     Developer
                 </motion.h1>
             </div>
 
             {/* Bottom Area */}
-            <div className="flex flex-col md:flex-row justify-between items-end w-full z-10 gap-8 relative">
+            <div className="flex flex-col md:flex-row justify-between items-end w-full z-10 gap-8 relative pb-[60px]">
 
                 {/* Rotating Scroll Indicator (Bottom Left) */}
-                <div className="absolute left-0 bottom-0 hidden md:flex items-center justify-center">
+                <div className="absolute left-[60px] bottom-[60px] hidden lg:flex items-center justify-center">
                     <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        className="w-24 h-24 border border-muted-foreground/30 rounded-full flex items-center justify-center relative"
+                        className="w-24 h-24 border border-muted-foreground/30 rounded-full flex items-center justify-center relative bg-background"
                     >
                         <svg viewBox="0 0 100 100" className="w-full h-full absolute inset-0 text-muted-foreground">
                             <defs>
@@ -61,17 +61,17 @@ export default function Hero() {
                 </div>
 
                 {/* Bottom Right: Status & Location */}
-                <div className="flex flex-col gap-2 items-end w-full md:w-auto">
-                    <div className="flex items-center gap-3">
+                <div className="flex flex-col gap-1 items-end w-full md:w-auto text-right">
+                    <div className="flex items-center gap-3 justify-end">
                         <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
                             Open to work
                         </span>
-                        <div className="relative flex h-3 w-3">
+                        <div className="relative flex h-2.5 w-2.5">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                         </div>
                     </div>
-                    <div className="text-sm text-muted-foreground uppercase tracking-wide text-right">
+                    <div className="text-sm text-muted-foreground uppercase tracking-wide">
                         Based in France
                     </div>
                 </div>
