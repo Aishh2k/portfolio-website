@@ -269,13 +269,12 @@ export default function LargeTypePage() {
 
                 <ul className="text-display">
                     {segments.length === 0 ? (
-                        // Placeholder space if empty (to keep structure? Original does space)
-                        <li className="charbox" style={{ opacity: 0 }}>
-                            <span className="char" style={{ fontSize: '30vw' }}>&nbsp;</span>
+                        <li className="charbox h-[30vw] w-full flex items-center justify-center text-muted-foreground/20">
+                            {/* Empty state or placeholder */}
                         </li>
                     ) : (
                         segments.map((seg, i) => (
-                            <li key={i} className="charbox">
+                            <li key={i} className="charbox" style={{ opacity: 1 }}>
                                 <span
                                     className={`char ${getCharClass(seg)}`}
                                     style={{ fontSize: `${fontSizeVW}vw` }}
