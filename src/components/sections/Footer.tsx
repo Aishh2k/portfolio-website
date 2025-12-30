@@ -11,8 +11,8 @@ export default function Footer() {
     return (
         <footer id="contact" className="w-full py-20 px-6 md:px-12 bg-background border-t border-border/50 text-foreground">
             <div className="flex flex-col gap-10">
-                <h2 className="text-[10vw] leading-[0.8] font-bold uppercase tracking-tighter text-center md:text-left">
-                    Let&apos;s work <br /> together
+                <h2 className="text-[14vw] lg:text-[120px] leading-[0.85] lg:leading-[120px] font-bold uppercase tracking-tighter text-center md:text-left">
+                    Let&apos;s work <br />together
                 </h2>
 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10 mt-10">
@@ -53,14 +53,12 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <div className="flex justify-between items-center mt-20 pt-10 border-t border-border/50 text-xs md:text-sm text-muted-foreground uppercase tracking-wide">
-                    <span>© 2025 Aiswarya Jayachandran</span>
-
-                    {/* Click here with arrow pointing to red dot */}
-                    <div className="flex items-center gap-2 relative">
+                <div className="flex justify-center items-center mt-20 pt-10 border-t border-border/50 text-xs md:text-sm text-muted-foreground uppercase tracking-wide">
+                    {/* For my grandmom with arrow pointing to red dot */}
+                    <div className="flex items-center gap-2">
                         {/* Hand-drawn arrow and text */}
                         <div className="flex items-center gap-1 text-muted-foreground/70">
-                            <span className="text-xs italic font-normal normal-case tracking-normal">click here</span>
+                            <span className="text-xs italic font-normal normal-case tracking-normal">for my grandmom</span>
                             {/* Hand-drawn curved arrow SVG */}
                             <svg
                                 width="40"

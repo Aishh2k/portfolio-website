@@ -29,17 +29,17 @@ const projects: Project[] = [
     },
     {
         id: 3,
-        title: "CUSTOM CRM APPLICATION FOR HOME CHEFS",
-        category: "Full Stack",
-        year: "2021",
-        description: "Created a custom CRM application using React and Express.js for home chefs to manage inventory and orders. Features intuitive order management workflows and real-time inventory tracking.",
-    },
-    {
-        id: 4,
         title: "AGRICULTURE CHAIN DECENTRALIZED APPLICATION WITH MICRO-FINANCE",
         category: "Blockchain",
         year: "2022",
         description: "Developed a decentralized application for agricultural supply chain management with integrated micro-finance capabilities. Enables transparent tracking of produce from farm to consumer while providing farmers access to micro-loans.",
+    },
+    {
+        id: 4,
+        title: "CUSTOM CRM APPLICATION FOR HOME CHEFS",
+        category: "Full Stack",
+        year: "2021",
+        description: "Created a custom CRM application using React and Express.js for home chefs to manage inventory and orders. Features intuitive order management workflows and real-time inventory tracking.",
     },
 ]
 

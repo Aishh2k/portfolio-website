@@ -51,29 +51,13 @@ export default function Hero() {
             </div>
 
             {/* Bottom Area */}
-            <div className="flex flex-col md:flex-row justify-between items-end w-full z-10 gap-8 relative pb-[60px]">
+            <div className="flex flex-col md:flex-row justify-between items-end w-full z-10 gap-8 relative pb-3">
 
-                {/* Rotating Scroll Indicator (Bottom Left) */}
-                <div className="hidden lg:flex items-center justify-center">
-                    <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        className="w-24 h-24 border border-muted-foreground/30 rounded-full flex items-center justify-center relative bg-background"
-                    >
-                        <svg viewBox="0 0 100 100" className="w-full h-full absolute inset-0 text-muted-foreground">
-                            <defs>
-                                <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" />
-                            </defs>
-                            <text fontSize="11.5" fontWeight="bold" letterSpacing="2" fill="currentColor">
-                                <textPath href="#circlePath" startOffset="0%">
-                                    SCROLL DOWN - SCROLL DOWN -
-                                </textPath>
-                            </text>
-                        </svg>
-                    </motion.div>
-                    <div className="absolute flex items-center justify-center w-full h-full pointer-events-none">
-                        <Asterisk className="w-6 h-6 text-foreground" />
-                    </div>
+                {/* Scroll Text (Bottom Left) */}
+                <div className="flex flex-col gap-1 items-start">
+                    <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
+                        Scroll
+                    </span>
                 </div>
 
                 {/* Bottom Right: Status & Location */}
