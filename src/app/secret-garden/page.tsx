@@ -18,7 +18,7 @@ interface Drawing {
     created_at: string;
 }
 
-export const Flower = ({
+const Flower = ({
     flower,
     position,
     index,
