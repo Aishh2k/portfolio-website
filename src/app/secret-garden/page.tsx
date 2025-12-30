@@ -77,15 +77,19 @@ export default function Garden() {
         setIsTyping(true);
 
         const typingInterval = setInterval(() => {
-            if (currentIndex < caption.length - 1) {
+            if (currentIndex < caption.length) {
                 setDisplayedCaption(caption.slice(0, currentIndex + 1));
                 setCurrentIndex(currentIndex + 1);
             } else {
                 setIsTyping(false);
-                setCurrentIndex(0);
-                setTimeout(() => clearInterval(typingInterval), 1);
+                // Pause at the end before resetting
+                setTimeout(() => {
+                    setCurrentIndex(0);
+                    setDisplayedCaption("");
+                }, 3000);
+                clearInterval(typingInterval);
             }
-        }, 100);
+        }, 200);
 
         return () => clearInterval(typingInterval);
     }, [caption, displayedCaption, currentIndex]);
@@ -235,35 +239,40 @@ export default function Garden() {
             <div className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 w-full max-w-[1400px] mx-auto">
 
                 {/* Left Side - Island with glow */}
-                <div
-                    className="relative"
-                    style={{
-                        animation: "bob 3s ease-in-out infinite",
-                        filter: "drop-shadow(0 0 70px rgba(60, 122, 59, 0.45)) drop-shadow(0 0 110px rgba(60, 122, 59, 0.27)) brightness(0.7)"
-                    }}
-                >
-                    <img
-                        src="/island.png"
-                        alt="Garden island"
-                        className="w-[450px] lg:w-[600px] max-w-full"
-                    />
+                <div className="relative group" id="garden-island-container">
+                    {/* Ambient Glow Background - Reduced by 50% more */}
+                    <div className="absolute inset-0 bg-green-500/5 blur-[80px] rounded-full scale-150 animate-pulse pointer-events-none" />
 
-                    {/* Flowers positioned on the island */}
-                    {!loading &&
-                        !error &&
-                        flowers.map((flower, index) => {
-                            const position = flowerPositions[flowerPositions.length - index - 1];
-                            if (!position) return null;
+                    <div
+                        className="relative"
+                        style={{
+                            animation: "bob 3s ease-in-out infinite",
+                            filter: "drop-shadow(0 0 30px rgba(74, 222, 128, 0.12))"
+                        }}
+                    >
+                        <img
+                            src="/island.png"
+                            alt="Garden island"
+                            className="w-[450px] lg:w-[700px] max-w-full brightness-90 drop-shadow-[0_0_15px_rgba(74, 222, 128, 0.07)]"
+                        />
 
-                            return (
-                                <Flower
-                                    key={flower.id}
-                                    flower={flower}
-                                    position={position}
-                                    index={index}
-                                />
-                            );
-                        })}
+                        {/* Flowers positioned on the island */}
+                        {!loading &&
+                            !error &&
+                            flowers.map((flower, index) => {
+                                const position = flowerPositions[flowerPositions.length - index - 1];
+                                if (!position) return null;
+
+                                return (
+                                    <Flower
+                                        key={flower.id}
+                                        flower={flower}
+                                        position={position}
+                                        index={index}
+                                    />
+                                );
+                            })}
+                    </div>
                 </div>
 
                 {/* Right Side - Drawing Panel */}
