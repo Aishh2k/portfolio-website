@@ -213,6 +213,7 @@ export default function LargeTypePage() {
             flex-wrap: wrap; 
             max-width: 95%;
             justify-content: center;
+            list-style: none; /* KEY FIX: Remove list markers */
         }
         
         /* Original uses float left, let's stick closer to flex */
@@ -221,7 +222,9 @@ export default function LargeTypePage() {
             display: flex;
             flex-direction: column;
             align-items: center;
-            list-style: none;
+            list-style: none; /* KEY FIX: Ensure no bullets on items */
+            margin: 0; /* Ensure no margin spacing */
+            padding: 0;
             /* width handled by font-size? No, width is implicit. */
         }
         
