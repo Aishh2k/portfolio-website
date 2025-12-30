@@ -1,0 +1,112 @@
+2025-12-30T03:05:30.953Z	Initializing build environment...
+2025-12-30T03:06:33.723Z	Success: Finished initializing build environment
+2025-12-30T03:06:34.227Z	Cloning repository...
+2025-12-30T03:06:35.626Z	Restoring from dependencies cache
+2025-12-30T03:06:35.628Z	Restoring from build output cache
+2025-12-30T03:06:35.630Z	Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
+2025-12-30T03:06:35.894Z	Installing project dependencies: npm clean-install --progress=false
+2025-12-30T03:06:40.192Z	npm warn deprecated path-match@1.2.4: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
+2025-12-30T03:06:44.185Z	npm warn deprecated @studio-freight/lenis@1.0.42: The '@studio-freight/lenis' package has been renamed to 'lenis'. Please update your dependencies: npm install lenis and visit the documentation: https://www.npmjs.com/package/lenis
+2025-12-30T03:06:45.069Z	npm warn deprecated @cloudflare/next-on-pages@1.13.16: Please use the OpenNext adapter instead: https://opennext.js.org/cloudflare
+2025-12-30T03:07:06.681Z	npm warn deprecated next@15.5.2: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/CVE-2025-66478 for more details.
+2025-12-30T03:07:44.784Z	
+2025-12-30T03:07:44.785Z	added 649 packages, and audited 650 packages in 1m
+2025-12-30T03:07:44.786Z	
+2025-12-30T03:07:44.789Z	180 packages are looking for funding
+2025-12-30T03:07:44.789Z	  run `npm fund` for details
+2025-12-30T03:07:44.865Z	
+2025-12-30T03:07:44.865Z	13 vulnerabilities (1 low, 6 moderate, 4 high, 2 critical)
+2025-12-30T03:07:44.865Z	
+2025-12-30T03:07:44.865Z	To address issues that do not require attention, run:
+2025-12-30T03:07:44.865Z	  npm audit fix
+2025-12-30T03:07:44.865Z	
+2025-12-30T03:07:44.865Z	Some issues need review, and may require choosing
+2025-12-30T03:07:44.866Z	a different dependency.
+2025-12-30T03:07:44.866Z	
+2025-12-30T03:07:44.866Z	Run `npm audit` for details.
+2025-12-30T03:07:45.051Z	Executing user build command: npm run build
+2025-12-30T03:07:45.328Z	
+2025-12-30T03:07:45.329Z	> portfolio@0.1.0 build
+2025-12-30T03:07:45.329Z	> next build
+2025-12-30T03:07:45.329Z	
+2025-12-30T03:07:46.321Z	⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+2025-12-30T03:07:46.326Z	Attention: Next.js now collects completely anonymous telemetry regarding usage.
+2025-12-30T03:07:46.326Z	This information is used to shape Next.js' roadmap and prioritize features.
+2025-12-30T03:07:46.326Z	You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-12-30T03:07:46.326Z	https://nextjs.org/telemetry
+2025-12-30T03:07:46.326Z	
+2025-12-30T03:07:46.395Z	   ▲ Next.js 15.5.2
+2025-12-30T03:07:46.395Z	   - Experiments (use with caution):
+2025-12-30T03:07:46.395Z	     ✓ reactCompiler
+2025-12-30T03:07:46.395Z	
+2025-12-30T03:07:46.480Z	   Creating an optimized production build ...
+2025-12-30T03:08:01.187Z	 ✓ Compiled successfully in 11.6s
+2025-12-30T03:08:01.191Z	   Linting and checking validity of types ...
+2025-12-30T03:08:01.535Z	
+2025-12-30T03:08:01.538Z	   We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+2025-12-30T03:08:01.538Z	   The following mandatory changes were made to your tsconfig.json:
+2025-12-30T03:08:01.538Z	
+2025-12-30T03:08:01.538Z	   	- jsx was set to preserve (next.js implements its own optimized jsx transform)
+2025-12-30T03:08:01.538Z	
+2025-12-30T03:08:05.533Z	   Collecting page data ...
+2025-12-30T03:08:07.278Z	   Generating static pages (0/5) ...
+2025-12-30T03:08:08.167Z	   Generating static pages (1/5) 
+2025-12-30T03:08:08.168Z	   Generating static pages (2/5) 
+2025-12-30T03:08:08.169Z	   Generating static pages (3/5) 
+2025-12-30T03:08:08.169Z	 ✓ Generating static pages (5/5)
+2025-12-30T03:08:08.783Z	   Finalizing page optimization ...
+2025-12-30T03:08:08.784Z	   Collecting build traces ...
+2025-12-30T03:08:16.982Z	
+2025-12-30T03:08:16.985Z	Route (app)                                 Size  First Load JS
+2025-12-30T03:08:16.986Z	┌ ○ /                                      48 kB         150 kB
+2025-12-30T03:08:16.986Z	└ ○ /_not-found                            993 B         103 kB
+2025-12-30T03:08:16.986Z	+ First Load JS shared by all             102 kB
+2025-12-30T03:08:16.986Z	  ├ chunks/261-6a71fa4e18b92a5c.js       45.8 kB
+2025-12-30T03:08:16.986Z	  ├ chunks/4bd1b696-bc41f9a1b0daa128.js  54.2 kB
+2025-12-30T03:08:16.986Z	  └ other shared chunks (total)          1.92 kB
+2025-12-30T03:08:16.986Z	
+2025-12-30T03:08:16.986Z	
+2025-12-30T03:08:16.988Z	○  (Static)  prerendered as static content
+2025-12-30T03:08:16.988Z	
+2025-12-30T03:08:17.058Z	Success: Build command completed
+2025-12-30T03:08:17.148Z	Executing user deploy command: npx wrangler deploy
+2025-12-30T03:08:18.823Z	
+2025-12-30T03:08:18.823Z	 ⛅️ wrangler 4.54.0
+2025-12-30T03:08:18.824Z	───────────────────
+2025-12-30T03:08:18.839Z	
+2025-12-30T03:08:18.898Z	✘ [ERROR] Missing entry-point to Worker script or to assets directory
+2025-12-30T03:08:18.898Z	
+2025-12-30T03:08:18.899Z	  
+2025-12-30T03:08:18.899Z	  If there is code to deploy, you can either:
+2025-12-30T03:08:18.899Z	  - Specify an entry-point to your Worker script via the command line (ex: `npx wrangler deploy src/index.ts`)
+2025-12-30T03:08:18.899Z	  - Or create a "wrangler.jsonc" file containing:
+2025-12-30T03:08:18.899Z	  
+2025-12-30T03:08:18.899Z	  ```
+2025-12-30T03:08:18.899Z	  {
+2025-12-30T03:08:18.899Z	    "name": "worker-name",
+2025-12-30T03:08:18.899Z	    "compatibility_date": "2025-12-30",
+2025-12-30T03:08:18.899Z	    "main": "src/index.ts"
+2025-12-30T03:08:18.899Z	  }
+2025-12-30T03:08:18.899Z	  ```
+2025-12-30T03:08:18.899Z	  
+2025-12-30T03:08:18.899Z	  
+2025-12-30T03:08:18.899Z	  If are uploading a directory of assets, you can either:
+2025-12-30T03:08:18.900Z	  - Specify the path to the directory of assets via the command line: (ex: `npx wrangler deploy --assets=./dist`)
+2025-12-30T03:08:18.900Z	  - Or create a "wrangler.jsonc" file containing:
+2025-12-30T03:08:18.900Z	  
+2025-12-30T03:08:18.900Z	  ```
+2025-12-30T03:08:18.900Z	  {
+2025-12-30T03:08:18.900Z	    "name": "worker-name",
+2025-12-30T03:08:18.900Z	    "compatibility_date": "2025-12-30",
+2025-12-30T03:08:18.900Z	    "assets": {
+2025-12-30T03:08:18.901Z	      "directory": "./dist"
+2025-12-30T03:08:18.902Z	    }
+2025-12-30T03:08:18.902Z	  }
+2025-12-30T03:08:18.902Z	  ```
+2025-12-30T03:08:18.902Z	  
+2025-12-30T03:08:18.902Z	
+2025-12-30T03:08:18.902Z	
+2025-12-30T03:08:18.919Z	
+2025-12-30T03:08:18.919Z	Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+2025-12-30T03:08:18.944Z	🪵  Logs were written to "/opt/buildhome/.config/.wrangler/logs/wrangler-2025-12-30_03-08-18_176.log"
+2025-12-30T03:08:19.076Z	Failed: error occurred while running deploy command
