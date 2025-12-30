@@ -1,55 +1,50 @@
+"use client";
+
 export default function BigPage() {
     return (
-        <html lang="en">
-            <head>
-                <meta charSet="UTF-8" />
-                <title>Display Large Text</title>
-                <meta name="viewport" content="width=device-width, user-scalable=no" />
-                <meta name="description" content="Display & share text in a large font directly from your browser." />
-            </head>
-            <body>
-                {/* Content */}
-                <div className="main">
-                    <span className="inputarea">
-                        <input type="text" className="inputbox" tabIndex={1} placeholder="Enter your text here" />
-                        <span className="button-row">
-                            <a href="" className="js-help-button">What is this?</a>
-                            <a href="" className="js-share-button">Share this text</a>
-                        </span>
+        <>
+            {/* Content */}
+            <div className="main">
+                <span className="inputarea">
+                    <input type="text" className="inputbox" tabIndex={1} placeholder="Enter your text here" />
+                    <span className="button-row">
+                        <a href="" className="js-help-button">What is this?</a>
+                        <a href="" className="js-share-button">Share this text</a>
                     </span>
+                </span>
 
-                    <span id="darktoggle"></span>
+                <span id="darktoggle"></span>
 
-                    <ul className="text">
-                        <template id="charbox-template">
-                            <li className="charbox">
-                                <span className="char"></span>
-                            </li>
-                        </template>
-                    </ul>
+                <ul className="text">
+                    <template id="charbox-template">
+                        <li className="charbox">
+                            <span className="char"></span>
+                        </li>
+                    </template>
+                </ul>
 
-                    <span className="about">
-                        Made with love by <a href="https://dbader.org">Dan Bader</a>
-                    </span>
-                </div>
+                <span className="about">
+                    Made with love by <a href="https://dbader.org">Dan Bader</a>
+                </span>
+            </div>
 
-                {/* Modals */}
-                <div className="modal js-help-modal">
-                    <h2>What is this?</h2>
-                    <p>This lets you <strong>display & share text in a very large font</strong> directly from your browser.</p>
-                    <p>That&apos;s handy whenever you need to <strong>read something on your screen from further away</strong>&mdash;for example, phone numbers and passwords.</p>
-                    <p>When you share text, <strong>only the person with the link sees your text</strong>. Rendering happens locally on your browser and your text is not transmitted to any servers.</p>
-                    <button className="js-modal-close">Close</button>
-                </div>
+            {/* Modals */}
+            <div className="modal js-help-modal">
+                <h2>What is this?</h2>
+                <p>This lets you <strong>display & share text in a very large font</strong> directly from your browser.</p>
+                <p>That&apos;s handy whenever you need to <strong>read something on your screen from further away</strong>&mdash;for example, phone numbers and passwords.</p>
+                <p>When you share text, <strong>only the person with the link sees your text</strong>. Rendering happens locally on your browser and your text is not transmitted to any servers.</p>
+                <button className="js-modal-close">Close</button>
+            </div>
 
-                <div className="modal js-share-modal">
-                    <h2>Copy the link below:</h2>
-                    <input type="text" className="js-share-link" defaultValue="" />
-                    <button className="js-modal-close">Close</button>
-                </div>
+            <div className="modal js-share-modal">
+                <h2>Copy the link below:</h2>
+                <input type="text" className="js-share-link" defaultValue="" />
+                <button className="js-modal-close">Close</button>
+            </div>
 
-                <script dangerouslySetInnerHTML={{
-                    __html: `
+            <script dangerouslySetInnerHTML={{
+                __html: `
 window.addEventListener('DOMContentLoaded', function() {
     "use strict";
 
@@ -232,10 +227,10 @@ window.addEventListener('DOMContentLoaded', function() {
 
     renderText();
 });
-        `}} />
+      `}} />
 
-                <style dangerouslySetInnerHTML={{
-                    __html: `
+            <style dangerouslySetInnerHTML={{
+                __html: `
 /*** Color Schemes ****************************************************/
 
 :root {
@@ -562,8 +557,7 @@ input::-webkit-input-placeholder {
 .modal li {
     margin-top: 7.5px;
 }
-        `}} />
-            </body>
-        </html>
+      `}} />
+        </>
     );
 }
