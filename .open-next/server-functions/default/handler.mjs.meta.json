@@ -7802,14 +7802,8 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/open-next.config.mjs": {
-      "bytes": 11492,
-      "imports": [
-        {
-          "path": "node:crypto",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
+      "bytes": 6733,
+      "imports": [],
       "format": "esm"
     },
     ".open-next/server-functions/default/index.mjs": {
@@ -8590,11 +8584,6 @@
         {
           "path": "path",
           "kind": "require-call",
-          "external": true
-        },
-        {
-          "path": "node:crypto",
-          "kind": "import-statement",
           "external": true
         },
         {
@@ -9899,7 +9888,7 @@
           "bytesInOutput": 6507
         },
         "node_modules/sharp/lib/libvips.js": {
-          "bytesInOutput": 4161
+          "bytesInOutput": 4148
         },
         "node_modules/sharp/lib/sharp.js": {
           "bytesInOutput": 3182
@@ -9962,13 +9951,13 @@
           "bytesInOutput": 30150
         },
         ".open-next/server-functions/default/open-next.config.mjs": {
-          "bytesInOutput": 8710
+          "bytesInOutput": 4971
         },
         ".open-next/server-functions/default/index.mjs": {
-          "bytesInOutput": 54184
+          "bytesInOutput": 54133
         }
       },
-      "bytes": 4834900
+      "bytes": 4831097
     }
   }
 }
