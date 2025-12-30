@@ -1,27 +1,131 @@
 "use client";
 
+import { useEffect, useState, useRef } from "react";
+
 export default function BigPage() {
+    const [text, setText] = useState("");
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [showHelp, setShowHelp] = useState(false);
+    const [showShare, setShowShare] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const textContainerRef = useRef<HTMLUListElement>(null);
+
+    // Initialize from URL hash and dark mode
+    useEffect(() => {
+        const hash = window.location.hash.substring(1);
+        const decoded = decodeURIComponent(hash || "*hello*");
+        setText(decoded);
+
+        const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        setIsDarkMode(darkModePreference);
+        document.body.classList.toggle("dark-mode", darkModePreference);
+    }, []);
+
+    // Update hash when text changes
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            window.location.replace(window.location.pathname + "#" + encodeURIComponent(text));
+        }
+    }, [text]);
+
+    // Render large text
+    useEffect(() => {
+        if (!textContainerRef.current) return;
+
+        const container = textContainerRef.current;
+
+        // Clear existing content
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+
+        const displayText = text || " ";
+        let segments: string[] = [];
+        let textWidth = 0;
+
+        // Use Intl.Segmenter if available for emoji support
+        if (window.Intl && (window.Intl as any).Segmenter) {
+            const segmenter = new (window.Intl as any).Segmenter();
+            const rawSegments = Array.from(segmenter.segment(displayText));
+            rawSegments.forEach((seg: any) => {
+                segments.push(seg.segment);
+                if (/\p{Emoji}\uFE0F|\p{Emoji_Presentation}/u.test(seg.segment)) {
+                    textWidth += 1.65;
+                } else {
+                    textWidth += 1;
+                }
+            });
+        } else {
+            segments = displayText.split("");
+            textWidth = segments.length;
+        }
+
+        const fontSize = Math.min(150 / textWidth, 30);
+
+        segments.forEach((seg) => {
+            const li = document.createElement("li");
+            li.className = "charbox";
+
+            const span = document.createElement("span");
+            span.className = "char";
+            span.style.fontSize = `${fontSize}vw`;
+
+            if (seg === " ") {
+                span.innerHTML = "&nbsp;";
+            } else {
+                span.textContent = seg;
+            }
+
+            if (/\p{Emoji}\uFE0F|\p{Emoji_Presentation}/u.test(seg)) {
+                span.className += " emoji";
+            } else if (/[0-9]/.test(seg)) {
+                span.className += " number";
+            } else if (!/\p{L}/iu.test(seg)) {
+                span.className += " symbol";
+            }
+
+            li.appendChild(span);
+            container.appendChild(li);
+        });
+    }, [text]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setText(e.target.value);
+    };
+
+    const toggleDarkMode = () => {
+        setIsDarkMode(!isDarkMode);
+        document.body.classList.toggle("dark-mode", !isDarkMode);
+    };
+
     return (
         <>
-            {/* Content */}
             <div className="main">
                 <span className="inputarea">
-                    <input type="text" className="inputbox" tabIndex={1} placeholder="Enter your text here" />
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        className="inputbox"
+                        tabIndex={1}
+                        placeholder="Enter your text here"
+                        value={text}
+                        onChange={handleInputChange}
+                    />
                     <span className="button-row">
-                        <a href="" className="js-help-button">What is this?</a>
-                        <a href="" className="js-share-button">Share this text</a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); setShowHelp(true); }}>
+                            What is this?
+                        </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); setShowShare(true); }}>
+                            Share this text
+                        </a>
                     </span>
                 </span>
 
-                <span id="darktoggle"></span>
+                <span id="darktoggle" onClick={toggleDarkMode}>
+                    {isDarkMode ? "☀️" : "🌑"}
+                </span>
 
-                <ul className="text">
-                    <template id="charbox-template">
-                        <li className="charbox">
-                            <span className="char"></span>
-                        </li>
-                    </template>
-                </ul>
+                <ul ref={textContainerRef} className="text"></ul>
 
                 <span className="about">
                     Made with love by <a href="https://dbader.org">Dan Bader</a>
@@ -29,535 +133,378 @@ export default function BigPage() {
             </div>
 
             {/* Modals */}
-            <div className="modal js-help-modal">
-                <h2>What is this?</h2>
-                <p>This lets you <strong>display & share text in a very large font</strong> directly from your browser.</p>
-                <p>That&apos;s handy whenever you need to <strong>read something on your screen from further away</strong>&mdash;for example, phone numbers and passwords.</p>
-                <p>When you share text, <strong>only the person with the link sees your text</strong>. Rendering happens locally on your browser and your text is not transmitted to any servers.</p>
-                <button className="js-modal-close">Close</button>
-            </div>
+            {showHelp && (
+                <div className="modal-overlay" onClick={() => setShowHelp(false)}>
+                    <div className="modal open js-help-modal" onClick={(e) => e.stopPropagation()}>
+                        <h2>What is this?</h2>
+                        <p>
+                            This lets you <strong>display & share text in a very large font</strong> directly from your browser.
+                        </p>
+                        <p>
+                            That&apos;s handy whenever you need to <strong>read something on your screen from further away</strong>
+                            &mdash;for example, phone numbers and passwords.
+                        </p>
+                        <p>
+                            When you share text, <strong>only the person with the link sees your text</strong>. Rendering happens
+                            locally on your browser and your text is not transmitted to any servers.
+                        </p>
+                        <button className="js-modal-close" onClick={() => setShowHelp(false)}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
 
-            <div className="modal js-share-modal">
-                <h2>Copy the link below:</h2>
-                <input type="text" className="js-share-link" defaultValue="" />
-                <button className="js-modal-close">Close</button>
-            </div>
+            {showShare && (
+                <div className="modal-overlay" onClick={() => setShowShare(false)}>
+                    <div className="modal open js-share-modal" onClick={(e) => e.stopPropagation()}>
+                        <h2>Copy the link below:</h2>
+                        <input
+                            type="text"
+                            className="js-share-link"
+                            value={typeof window !== "undefined" ? window.location.href : ""}
+                            readOnly
+                            onClick={(e) => (e.target as HTMLInputElement).select()}
+                        />
+                        <button className="js-modal-close" onClick={() => setShowShare(false)}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
 
-            <script dangerouslySetInnerHTML={{
-                __html: `
-window.addEventListener('DOMContentLoaded', function() {
-    "use strict";
+            <style jsx global>{`
+        /*** Color Schemes ****************************************************/
 
-    var WELCOME_MSG = '*hello*';
+        :root {
+          --link-color: #b94669;
+          --hover-color: #d36083;
+          --active-color: #a02d50;
 
-    var mainDiv = document.querySelector('.main');
-    var textDiv = document.querySelector('.text');
-    var inputField = document.querySelector('.inputbox');
-    var shareLinkField = document.querySelector('.js-share-link');
-    var charboxTemplate = document.querySelector('#charbox-template');
-    var defaultTitle = document.querySelector("title").innerText;
+          --bg-odd-letters: white;
+          --bg-even-letters: #f7f7f7;
+          --modal-bg-color: white;
+          --bg-color: unset;
 
-    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.getElementById('darktoggle').addEventListener('click', () => setDarkMode(!isDarkMode));
-    setDarkMode(isDarkMode);
-
-    function setDarkMode(darkMode) {
-        isDarkMode = darkMode; 
-        document.getElementById('darktoggle').innerText = isDarkMode ? '☀️' : '🌑';
-        document.body.classList.toggle('dark-mode', isDarkMode);
-    }
-
-    function updateFragment(text) {
-        window.location.replace(location.origin + location.pathname + '#' + encodeURIComponent(text));
-        shareLinkField.value = location.origin + location.pathname + location.hash;
-    }
-
-    function updateTitle(text) {
-        if (!text || text === WELCOME_MSG) {
-            document.title = defaultTitle;
-        } else {
-            document.title = text;
-        }
-    }
-
-    function clearChars() {
-        while (textDiv.firstChild) {
-            textDiv.removeChild(textDiv.firstChild);
-        }
-    }
-
-    function isEmoji(seg) {
-      if (window.Intl && window.Intl.Segmenter) {
-        return seg.match(/\\p{Emoji}\\uFE0F|\\p{Emoji_Presentation}/u);
-      } else {
-        return false;
-      }
-    }
-
-    function renderText() {
-        var text = decodeURIComponent(location.hash.split('#')[1] || ' ');
-
-        clearChars();
-
-        var textWidth = null;
-        var forEachSegment = null;
-        if (window.Intl && window.Intl.Segmenter) {
-            var segmenter = new Intl.Segmenter();
-            var segments = Array.from(segmenter.segment(text));
-            forEachSegment = function forEachGraphemeSegment(f) {
-                segments.forEach(function(seg) {
-                    f.call(this, seg.segment, seg.index);
-                });
-            };
-
-            textWidth = 0;
-            forEachSegment(function(seg) {
-                if (isEmoji(seg)) {
-                    textWidth += 1.65;
-                } else {
-                    textWidth += 1;
-                }
-            });
-        } else {
-            textWidth = text.length;
-            forEachSegment = function forEachCharSegment(f) {
-                text.split(/.*?/u).forEach(f);
-            };
+          --main-color: #222;
+          --text-shadow-color: #aaa;
+          --input-color: #ccc;
         }
 
-        var fontSize = Math.min(150 / textWidth, 30);
+        body.dark-mode {
+          --bg-odd-letters: black;
+          --bg-even-letters: #272727;
+          --modal-bg-color: black;
+          --bg-color: black;
 
-        forEachSegment(function(seg) {
-            var charbox = charboxTemplate.content.cloneNode(true);
-            var charElem = charbox.querySelector('.char');
-            charElem.style.fontSize = fontSize + 'vw';
-
-            if (seg !== ' ') {
-                charElem.textContent = seg;
-            } else {
-                charElem.innerHTML = '&nbsp;';
-            }
-
-            if (isEmoji(seg)) {
-                charElem.className = 'emoji';
-            } else if (seg.match(/[0-9]/i)) {
-                charElem.className = 'number';
-            } else if (!seg.match(/\\p{L}/iu)) {
-                charElem.className = 'symbol';
-            }
-
-            textDiv.appendChild(charbox);
-        });
-
-        if (text === ' ') {
-            text = '';
+          --main-color: #ddd;
+          --text-shadow-color: #444;
+          --input-color: #777;
         }
 
-        if (inputField.value !== text) {
-            inputField.value = text;
+        /*** Common ***********************************************************/
+
+        * {
+          margin: 0;
+          padding: 0;
         }
-        updateFragment(text);
-        updateTitle(text);
-    }
 
-    function onInput(evt) {
-        updateFragment(evt.target.value);
-    }
-
-    function enterInputMode(evt) {
-        var defaultHash = '#' + encodeURIComponent(WELCOME_MSG);
-        if (location.hash === defaultHash) {
-            updateFragment('');
-            renderText();
+        html,
+        body {
+          font-family: sans-serif;
+          height: 100%;
+          overflow: hidden;
+          color: var(--main-color);
         }
-        inputField.focus();
-    }
 
-    function modalKeyHandler(sel, evt) {
-        if (evt.keyCode === 27) {
-            hideModal(sel);
+        h1,
+        h2 {
+          font-size: 200%;
         }
-    }
 
-    function showModal(sel) {
-        window.removeEventListener('keypress', enterInputMode);
-        var modalDiv = document.querySelector(sel);
-        modalDiv.classList.add('open');
-        mainDiv.classList.add('blurred');
-        var closeBtn = modalDiv.querySelector('.js-modal-close');
-
-        closeBtn.onclick = hideModal.bind(null, sel);
-        window.onkeydown = modalKeyHandler.bind(null, sel);
-
-        modalDiv.scrollTop = 0;
-    }
-
-    function hideModal(sel) {
-        var modalDiv = document.querySelector(sel);
-        modalDiv.classList.remove('open');
-        mainDiv.classList.remove('blurred');
-        window.onkeydown = null;
-        window.addEventListener('keypress', enterInputMode, false);
-    }
-
-    document.querySelector('.js-help-button').addEventListener('click', function(evt) {
-        evt.preventDefault();
-        showModal('.js-help-modal');
-    }, false);
-
-    document.querySelector('.js-share-button').addEventListener('click', function(evt) {
-        evt.preventDefault();
-        showModal('.js-share-modal');
-
-        if (!isMobile) {
-            shareLinkField.select();
+        p {
+          line-height: 1.32;
+          margin: 10px 0 10px 0;
         }
-    }, false);
 
-    inputField.addEventListener('input', onInput, false);
-    textDiv.addEventListener('click', enterInputMode, false);
-    window.addEventListener('keypress', enterInputMode, false);
-    window.addEventListener('hashchange', renderText, false);
+        a {
+          color: var(--link-color);
+          text-decoration: none;
+        }
 
-    if (!location.hash) {
-        updateFragment(WELCOME_MSG);
-    }
+        a:visited {
+          color: var(--link-color);
+        }
 
-    renderText();
-});
-      `}} />
+        a:hover {
+          color: var(--hover-color);
+          text-decoration: underline;
+        }
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-/*** Color Schemes ****************************************************/
+        a:active {
+          color: var(--active-color);
+        }
 
-:root {
-    --link-color: #b94669;
-    --hover-color: #d36083;
-    --active-color: #a02d50;
+        input {
+          border-radius: 3px;
+          border: 1px solid var(--input-color);
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+          font-family: sans-serif;
+          font-size: 12px;
+          min-height: 26px;
+          outline: none;
+          padding: 2px;
+          text-align: center;
+          width: 100%;
+        }
 
-    --bg-odd-letters: white;
-    --bg-even-letters: #f7f7f7;
-    --modal-bg-color: white;
-    --bg-color: unset;
+        input:focus {
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 5px rgba(81, 167, 232, 0.5);
+          outline: none;
+        }
 
-    --main-color: #222;
-    --text-shadow-color: #aaa;
-    --input-color: #ccc;
-}
+        input::-webkit-input-placeholder {
+          color: var(--input-color);
+        }
 
-body.dark-mode {
-    --bg-odd-letters: black;
-    --bg-even-letters: #272727;
-    --modal-bg-color: black;
-    --bg-color: black;
+        /*** Anims ************************************************************/
 
-    --main-color: #ddd;
-    --text-shadow-color: #444;
-    --input-color: #777;
-}
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
 
-/*** Common ***********************************************************/
+        /*** Main *************************************************************/
 
-* {
-    margin: 0;
-    padding: 0;
-}
+        .main {
+          background-color: var(--bg-color);
+          align-items: center;
+          color: var(--main-color);
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
+          justify-content: center;
+          width: 100%;
+        }
 
-html, body {
-    font-family: sans-serif;
-    height: 100%;
-    overflow: hidden;
-    color: var(--main-color)
-}
+        .blurred {
+          filter: blur(5px) grayscale(50%);
+          pointer-events: none;
+        }
 
-h1, h2 {
-    font-size: 200%;
-}
+        #darktoggle {
+          position: absolute;
+          top: 10px;
+          right: 8px;
+          cursor: pointer;
+          user-select: none;
+        }
 
-p {
-    line-height: 1.32;
-    margin: 10px 0 10px 0;
-}
+        .inputarea {
+          font-size: 12px;
+          left: 0;
+          margin-left: 35%;
+          margin-right: 35%;
+          margin-top: 10px;
+          position: absolute;
+          top: 0;
+          width: 30%;
+        }
 
-a {
-    color: var(--link-color);
-    text-decoration: none;
-}
+        @media only screen and (max-width: 700px) {
+          .inputarea {
+            width: 80%;
+            margin-left: 10%;
+            margin-right: 10%;
+          }
+        }
 
-a:visited {
-    color: var(--link-color);
-}
+        .inputarea .button-row {
+          display: flex;
+          justify-content: center;
+        }
 
-a:hover {
-    color: var(--hover-color);
-    text-decoration: underline;
-}
+        .inputarea a {
+          color: var(--input-color);
+          margin: 5px 5px;
+          padding: 2px;
+        }
 
-a:active {
-    color: var(--active-color);
-}
+        .inputarea a:hover {
+          color: #222;
+          text-decoration: underline;
+        }
 
-input {
-    border-radius: 3px;
-    border: 1px solid var(--input-color);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
-    font-family: sans-serif;
-    font-size: 12px;
-    min-height: 26px;
-    outline: none;
-    padding: 2px;
-    text-align: center;
-    width: 100%;
-}
+        .text {
+          border-radius: 10px;
+          border: 1px solid #eee;
+          box-shadow: 10px 10px 50px 5px var(--text-shadow-color);
+          counter-reset: num-chars;
+          overflow: hidden;
+        }
 
-input:focus {
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075), 0 0 5px rgba(81,167,232,0.5);
-    outline: none;
-}
+        .text li {
+          counter-increment: num-chars;
+          display: flex;
+          flex-direction: column;
+          float: left;
+          font-family: monospace;
+          font-size: 10vw;
+        }
 
-input::-webkit-input-placeholder {
-    color: var(--input-color);
-}
+        .text li .number {
+          color: #456cad;
+        }
 
-/*** Anims ************************************************************/
+        .text li .symbol {
+          color: #b94669;
+        }
 
-@keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1.0;
-    }
-}
+        .text li .emoji {
+          height: 1.1645em;
+        }
 
-/*** Main *************************************************************/
+        .text li:nth-child(odd) {
+          background: var(--bg-odd-letters);
+        }
 
-.main {
-    background-color: var(--bg-color);
-    align-items: center;
-    color: var(--main-color);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
-    width: 100%;
-}
+        .text li:nth-child(even) {
+          background: var(--bg-even-letters);
+        }
 
-.blurred {
-    filter: blur(5px) grayscale(50%);
-    pointer-events: none;
-}
+        .text li::after {
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          color: #aaa;
+          content: counter(num-chars);
+          display: block;
+          font-size: 1.5vw;
+          text-align: center;
+          user-select: none;
+        }
 
-#darktoggle {
-    position: absolute;
-    top: 10px;
-    right: 8px;
-    cursor: pointer;
-    user-select: none;
-}
+        .about {
+          animation-delay: 2s;
+          animation-duration: 1.5s;
+          animation-fill-mode: forwards;
+          animation-iteration-count: 1;
+          animation-name: fade-in;
+          animation-timing-function: ease;
+          bottom: 10px;
+          display: block;
+          font-family: sans-serif;
+          left: 0;
+          opacity: 0;
+          position: absolute;
+          text-align: center;
+          width: 100%;
+          font-size: 1em;
+          font-weight: lighter;
+          color: #999;
+        }
 
-.inputarea {
-    font-size: 12px;
-    left: 0;
-    margin-left: 35%;
-    margin-right: 35%;
-    margin-top: 10px;
-    position: absolute;
-    top: 0;
-    width: 30%;
-}
+        .about a {
+          color: #666;
+        }
 
-@media only screen and (max-width: 700px) {
-    .inputarea {
-        width: 80%;
-        margin-left: 10%;
-        margin-right: 10%;
-    }
-}
+        @media only screen and (max-width: 700px) {
+          .about {
+            font-size: 60%;
+          }
+        }
 
-.inputarea .button-row {
-    display: flex;
-    justify-content: center;
-}
+        /*** Modals ***********************************************************/
 
-.inputarea a {
-    color: var(--input-color);
-    margin: 5px 5px;
-    padding: 2px;
-}
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 100;
+        }
 
-.inputarea a:hover {
-    color: #222;
-    text-decoration: underline;
-}
+        .modal {
+          -webkit-overflow-scrolling: touch;
+          background: var(--modal-bg-color);
+          border-radius: 3px;
+          box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.6);
+          max-height: 90%;
+          opacity: 0;
+          overflow: auto;
+          padding: 20px;
+          pointer-events: none;
+          transform: scale(0.7);
+          transition: all 0.25s ease;
+          width: 50%;
+          z-index: 99;
+        }
 
-.text {
-    border-radius: 10px;
-    border: 1px solid #eee;
-    box-shadow: 10px 10px 50px 5px var(--text-shadow-color);
-    counter-reset: num-chars;
-    overflow: hidden;
-}
+        @media only screen and (max-width: 700px) {
+          .modal {
+            width: 80%;
+          }
+        }
 
-.text li {
-    counter-increment: num-chars;
-    display: flex;
-    flex-direction: column;
-    float: left;
-    font-family: monospace;
-    font-size: 10vw;
-}
+        .modal.open {
+          opacity: 1;
+          pointer-events: auto;
+          transform: scale(1);
+        }
 
-.text li .number {
-    color: #456cad;
-}
+        .modal button {
+          -moz-transition: 0.15s background ease;
+          -ms-transition: 0.15s background ease;
+          -o-transition: 0.15s background ease;
+          -webkit-transition: 0.15s background ease;
+          background: #b94669;
+          border-radius: 1px;
+          border: 0px;
+          color: #fff;
+          cursor: pointer;
+          float: right;
+          font-size: 15px;
+          margin: 10px -6px 0 0;
+          outline: none;
+          padding: 8px 10px;
+          transition: 0.15s background ease;
+        }
 
-.text li .symbol {
-    color: #b94669;
-}
+        .modal button:hover {
+          background: var(--hover-color);
+        }
+        .modal button:active {
+          background: var(--active-color);
+        }
 
-.text li .emoji {
-    height: 1.1645em;
-}
+        .modal input {
+          font-size: 200%;
+          margin-top: 10px;
+        }
 
-.text li:nth-child(odd) {
-    background: var(--bg-odd-letters);
-}
+        .modal ul {
+          list-style-position: inside;
+          list-style-type: square;
+          margin-left: 0;
+          padding-left: 1em;
+          text-indent: -1em;
+        }
 
-.text li:nth-child(even) {
-    background: var(--bg-even-letters);
-}
-
-.text li::after {
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    color: #aaa;
-    content: counter(num-chars);
-    display: block;
-    font-size: 1.5vw;
-    text-align: center;
-    user-select: none;
-}
-
-.about {
-    animation-delay: 2s;
-    animation-duration: 1.5s;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-name: fade-in;
-    animation-timing-function: ease;
-    bottom: 10px;
-    display: block;
-    font-family: sans-serif;
-    left: 0;
-    opacity: 0;
-    position: absolute;
-    text-align: center;
-    width: 100%;
-    font-size: 1em;
-    font-weight: lighter;
-    color: #999;
-}
-
-.about a {
-    color: #666;
-}
-
-@media only screen and (max-width: 700px) {
-    .about {
-        font-size: 60%;
-    }
-}
-
-.twitter-follow-button {
-    vertical-align: text-bottom;
-}
-
-.twitter-share-button {
-    vertical-align: text-bottom;
-}
-
-/*** Modals ***********************************************************/
-
-.modal {
-    -webkit-overflow-scrolling: touch;
-    background: var(--modal-bg-color);
-    border-radius: 3px;
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.6);
-    left: 50%;
-    max-height: 90%;
-    opacity: 0;
-    overflow: auto;
-    padding: 20px;
-    pointer-events: none;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%) scale(0.7);
-    transition: all 0.25s ease;
-    width: 50%;
-    z-index: 99;
-}
-
-@media only screen and (max-width: 700px) {
-    .modal {
-        width: 80%;
-    }
-}
-
-.modal.open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translate(-50%, -50%) scale(1);
-}
-
-.modal button {
-    -moz-transition: 0.15s background ease;
-    -ms-transition: 0.15s background ease;
-    -o-transition: 0.15s background ease;
-    -webkit-transition: 0.15s background ease;
-    background: #b94669;
-    border-radius: 1px;
-    border: 0px;
-    color: #fff;
-    cursor: pointer;
-    float: right;
-    font-size: 15px;
-    margin: 10px -6px 0 0;
-    outline: none;
-    padding: 8px 10px;
-    transition: 0.15s background ease;
-}
-
-.modal button:hover {
-    background: var(--hover-color);
-}
-.modal button:active {
-    background: var(--active-color);
-}
-
-.modal input {
-    font-size: 200%;
-    margin-top: 10px;
-}
-
-.modal ul {
-    list-style-position: inside;
-    list-style-type: square;
-    margin-left: 0;
-    padding-left: 1em;
-    text-indent: -1em;
-}
-
-.modal li {
-    margin-top: 7.5px;
-}
-      `}} />
+        .modal li {
+          margin-top: 7.5px;
+        }
+      `}</style>
         </>
     );
 }
