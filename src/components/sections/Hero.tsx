@@ -4,16 +4,30 @@ import { motion } from "framer-motion"
 import { Asterisk } from "lucide-react"
 
 export default function Hero() {
+    const navLinks = [
+        { name: "Experience", href: "#experience" },
+        { name: "Projects", href: "#projects" },
+        { name: "Contact", href: "#contact" },
+    ]
+
     return (
-        <section className="h-screen w-full flex flex-col justify-between py-12 px-6 lg:px-[60px] relative overflow-hidden bg-background">
+        <section id="hero" className="h-screen w-full flex flex-col justify-between py-12 px-6 lg:px-[60px] relative overflow-hidden bg-background">
             {/* Top Bar: Name & Menu */}
             <div className="flex items-center justify-between w-full z-10">
                 <div className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
                     Aiswarya Jayachandran
                 </div>
-                <div className="text-sm font-medium tracking-widest uppercase text-muted-foreground hidden md:block">
-                    Menu
-                </div>
+                <nav className="hidden md:flex items-center gap-8">
+                    {navLinks.map((link) => (
+                        <a
+                            key={link.name}
+                            href={link.href}
+                            className="text-sm font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors duration-300"
+                        >
+                            {link.name}
+                        </a>
+                    ))}
+                </nav>
             </div>
 
             {/* Main Typography - Centered Vertically */}
