@@ -55,7 +55,50 @@ export default function Footer() {
 
                 <div className="flex justify-between items-center mt-20 pt-10 border-t border-border/50 text-xs md:text-sm text-muted-foreground uppercase tracking-wide">
                     <span>© 2025 Aiswarya Jayachandran</span>
-                    <span>Atlanta, GA</span>
+
+                    {/* Click here with arrow pointing to red dot */}
+                    <div className="flex items-center gap-2 relative">
+                        {/* Hand-drawn arrow and text */}
+                        <div className="flex items-center gap-1 text-muted-foreground/70">
+                            <span className="text-xs italic font-normal normal-case tracking-normal">click here</span>
+                            {/* Hand-drawn curved arrow SVG */}
+                            <svg
+                                width="40"
+                                height="20"
+                                viewBox="0 0 40 20"
+                                fill="none"
+                                className="text-muted-foreground/70"
+                            >
+                                <path
+                                    d="M2 12C8 4 20 2 32 8"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    fill="none"
+                                    style={{ strokeDasharray: "none" }}
+                                />
+                                {/* Arrow head */}
+                                <path
+                                    d="M28 4L32 8L27 11"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    fill="none"
+                                />
+                            </svg>
+                        </div>
+
+                        {/* Red pulsing dot */}
+                        <a
+                            href="/secret-garden"
+                            className="relative flex h-3 w-3 group"
+                            title="Secret Garden"
+                        >
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 group-hover:bg-red-400 transition-colors"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>

@@ -1,61 +1,103 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { motion, useSpring, useMotionValue } from "framer-motion"
 
 export default function CustomCursor() {
     const [isVisible, setIsVisible] = useState(false)
     const [isHovering, setIsHovering] = useState(false)
+    const [isTouchDevice, setIsTouchDevice] = useState(true) // Default to true to prevent flash
 
-    const mouseX = useMotionValue(0)
-    const mouseY = useMotionValue(0)
+    const mouseX = useMotionValue(-100)
+    const mouseY = useMotionValue(-100)
 
     // Smooth springs for the outer circle (follower)
     const springConfig = { stiffness: 150, damping: 20, mass: 0.5 }
     const followerX = useSpring(mouseX, springConfig)
     const followerY = useSpring(mouseY, springConfig)
 
+    // Detect touch device on mount
     useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            mouseX.set(e.clientX)
-            mouseY.set(e.clientY)
-            setIsVisible(true)
+        const checkTouchDevice = () => {
+            setIsTouchDevice(
+                'ontouchstart' in window ||
+                navigator.maxTouchPoints > 0
+            )
         }
+        checkTouchDevice()
+    }, [])
 
-        const handleMouseLeave = () => {
-            setIsVisible(false)
-        }
+    const handleMouseMove = useCallback((e: MouseEvent) => {
+        mouseX.set(e.clientX)
+        mouseY.set(e.clientY)
+        setIsVisible(true)
+    }, [mouseX, mouseY])
 
-        const handleMouseEnter = () => {
-            setIsVisible(true)
-        }
+    const handleMouseLeave = useCallback(() => {
+        setIsVisible(false)
+    }, [])
 
-        // Add hover detection for interactive elements
-        const addHoverListeners = () => {
-            const interactiveElements = document.querySelectorAll('a, button, [role="button"]')
-            interactiveElements.forEach((el) => {
-                el.addEventListener('mouseenter', () => setIsHovering(true))
-                el.addEventListener('mouseleave', () => setIsHovering(false))
-            })
-        }
+    const handleMouseEnter = useCallback(() => {
+        setIsVisible(true)
+    }, [])
+
+    useEffect(() => {
+        if (isTouchDevice) return
 
         window.addEventListener('mousemove', handleMouseMove)
-        document.body.addEventListener('mouseleave', handleMouseLeave)
-        document.body.addEventListener('mouseenter', handleMouseEnter)
-
-        // Add listeners after a short delay to ensure DOM is ready
-        const timeout = setTimeout(addHoverListeners, 100)
+        document.documentElement.addEventListener('mouseleave', handleMouseLeave)
+        document.documentElement.addEventListener('mouseenter', handleMouseEnter)
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove)
-            document.body.removeEventListener('mouseleave', handleMouseLeave)
-            document.body.removeEventListener('mouseenter', handleMouseEnter)
-            clearTimeout(timeout)
+            document.documentElement.removeEventListener('mouseleave', handleMouseLeave)
+            document.documentElement.removeEventListener('mouseenter', handleMouseEnter)
         }
-    }, [mouseX, mouseY])
+    }, [isTouchDevice, handleMouseMove, handleMouseLeave, handleMouseEnter])
+
+    // Handle hover state for interactive elements
+    useEffect(() => {
+        if (isTouchDevice) return
+
+        const handleHoverStart = () => setIsHovering(true)
+        const handleHoverEnd = () => setIsHovering(false)
+
+        // Use MutationObserver to handle dynamically added elements
+        const addListenersToElement = (el: Element) => {
+            el.addEventListener('mouseenter', handleHoverStart)
+            el.addEventListener('mouseleave', handleHoverEnd)
+        }
+
+        const removeListenersFromElement = (el: Element) => {
+            el.removeEventListener('mouseenter', handleHoverStart)
+            el.removeEventListener('mouseleave', handleHoverEnd)
+        }
+
+        const setupListeners = () => {
+            const interactiveElements = document.querySelectorAll('a, button, [role="button"], input, textarea, select')
+            interactiveElements.forEach(addListenersToElement)
+            return interactiveElements
+        }
+
+        // Initial setup
+        const elements = setupListeners()
+
+        // Observer for dynamically added elements
+        const observer = new MutationObserver(() => {
+            const newElements = document.querySelectorAll('a, button, [role="button"], input, textarea, select')
+            newElements.forEach(addListenersToElement)
+        })
+
+        observer.observe(document.body, { childList: true, subtree: true })
+
+        return () => {
+            elements.forEach(removeListenersFromElement)
+            observer.disconnect()
+        }
+    }, [isTouchDevice])
 
     // Don't render on touch devices
-    if (typeof window !== 'undefined' && 'ontouchstart' in window) {
+    if (isTouchDevice) {
         return null
     }
 
