@@ -35,15 +35,33 @@ export default function Gallery() {
             try {
                 const offset = (page - 1) * ITEMS_PER_PAGE;
 
-                // Fetch from localStorage
-                const stored = localStorage.getItem("gardenFlowers");
-                const allFlowers: Drawing[] = stored ? JSON.parse(stored) : [];
+                const { supabase } = await import("@/lib/supabase");
 
-                setTotalCount(allFlowers.length);
+                // Fetch the flowers for this page
+                const { data, error } = await supabase
+                    .from("public_flowers")
+                    .select("*")
+                    .order("created_at", { ascending: false })
+                    .range(offset, offset + ITEMS_PER_PAGE - 1);
 
-                // Paginate
-                const paginatedFlowers = allFlowers.slice(offset, offset + ITEMS_PER_PAGE);
-                setFlowers(paginatedFlowers);
+                if (error) {
+                    throw error;
+                }
+
+                // Fetch the total count (only on first load or when needed)
+                if (totalCount === 0) {
+                    const { count, error: countError } = await supabase
+                        .from("public_flowers")
+                        .select("*", { count: "exact", head: true });
+
+                    if (countError) {
+                        console.error("Error fetching count:", countError);
+                    } else {
+                        setTotalCount(count || 0);
+                    }
+                }
+
+                setFlowers(data || []);
             } catch (err) {
                 console.error("Error fetching flowers:", err);
                 setError(
@@ -53,7 +71,7 @@ export default function Gallery() {
                 setLoading(false);
             }
         },
-        []
+        [totalCount]
     );
 
     useEffect(() => {
@@ -151,8 +169,8 @@ export default function Gallery() {
                             onClick={goToPreviousPage}
                             disabled={currentPage === 1}
                             className={`px-4 py-2 rounded-full border transition-all ${currentPage === 1
-                                    ? "border-gray-300 text-gray-400 cursor-not-allowed"
-                                    : "border-green-800 text-green-800 hover:bg-green-800 hover:text-white"
+                                ? "border-gray-300 text-gray-400 cursor-not-allowed"
+                                : "border-green-800 text-green-800 hover:bg-green-800 hover:text-white"
                                 }`}
                         >
                             ← Previous
@@ -164,8 +182,8 @@ export default function Gallery() {
                             onClick={goToNextPage}
                             disabled={currentPage === totalPages}
                             className={`px-4 py-2 rounded-full border transition-all ${currentPage === totalPages
-                                    ? "border-gray-300 text-gray-400 cursor-not-allowed"
-                                    : "border-green-800 text-green-800 hover:bg-green-800 hover:text-white"
+                                ? "border-gray-300 text-gray-400 cursor-not-allowed"
+                                : "border-green-800 text-green-800 hover:bg-green-800 hover:text-white"
                                 }`}
                         >
                             Next →

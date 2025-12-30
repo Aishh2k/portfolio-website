@@ -104,19 +104,28 @@ export default function Garden() {
             const exportCanvas = canvasRef.current?.createExportCanvas();
             if (!exportCanvas) return;
 
-            const imageData = exportCanvas.toDataURL();
+            // Convert canvas to blob
+            const blob = await new Promise<Blob>((resolve) => {
+                exportCanvas.toBlob((blob) => {
+                    resolve(blob!);
+                }, "image/png");
+            });
 
-            const newFlower: Drawing = {
-                id: Date.now(),
-                filename: `flower-${Date.now()}.png`,
-                image_url: imageData,
-                confidence: 1,
-                created_at: new Date().toISOString(),
-            };
+            const formData = new FormData();
+            formData.append("file", blob);
+            formData.append("probability", "1.0");
 
-            const updatedFlowers = [newFlower, ...flowers];
-            setFlowers(updatedFlowers);
-            localStorage.setItem("gardenFlowers", JSON.stringify(updatedFlowers));
+            const response = await fetch("/api/save-image", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to save flower");
+            }
+
+            // Refresh the flowers list
+            fetchFlowers();
         } catch (error) {
             console.error("Error during save:", error);
         } finally {
@@ -184,8 +193,18 @@ export default function Garden() {
 
     const fetchFlowers = async () => {
         try {
-            const stored = localStorage.getItem("gardenFlowers");
-            const data = stored ? JSON.parse(stored) : [];
+            const { supabase } = await import("@/lib/supabase");
+
+            const { data, error } = await supabase
+                .from("public_flowers")
+                .select("*")
+                .order("created_at", { ascending: false })
+                .limit(22);
+
+            if (error) {
+                throw error;
+            }
+
             setFlowers(data || []);
         } catch (err) {
             console.error("Error fetching flowers:", err);
