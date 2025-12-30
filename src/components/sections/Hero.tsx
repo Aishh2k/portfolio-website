@@ -24,7 +24,7 @@ export default function Hero() {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-[14vw] lg:text-[120px] leading-[0.85] lg:leading-[120px] font-bold uppercase tracking-tighter text-white"
                 >
-                    Fullstack
+                    Software
                 </motion.h1>
                 <motion.h1
                     initial={{ y: 100, opacity: 0 }}
@@ -32,7 +32,7 @@ export default function Hero() {
                     transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
                     className="text-[14vw] lg:text-[120px] leading-[0.85] lg:leading-[120px] font-bold uppercase tracking-tighter text-white ml-0 lg:ml-[40px]"
                 >
-                    Developer
+                    Engineer
                 </motion.h1>
             </div>
 
@@ -66,7 +66,7 @@ export default function Hero() {
                 <div className="flex flex-col gap-1 items-end w-full md:w-auto text-right">
                     <div className="flex items-center gap-3 justify-end">
                         <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
-                            Open to work
+                            MS CS @ Georgia Tech
                         </span>
                         <div className="relative flex h-2.5 w-2.5">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
