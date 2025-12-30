@@ -15,6 +15,8 @@ export const DrawFlower = ({
     canvasRef,
     isAnalyzing,
     saveDrawing,
+    creatorName,
+    onNameChange,
     orientation = "horizontal",
 }: {
     displayedCaption: string;
@@ -22,6 +24,8 @@ export const DrawFlower = ({
     canvasRef: React.RefObject<CanvasRef>;
     isAnalyzing: boolean;
     saveDrawing: () => void;
+    creatorName: string;
+    onNameChange: (name: string) => void;
     orientation?: "horizontal" | "vertical";
 }) => {
     const [brushColor, setBrushColor] = useState(colors[0]);
@@ -46,8 +50,8 @@ export const DrawFlower = ({
             >
                 <div
                     className={`flex flex-col gap-2 py-2  ${orientation === "horizontal"
-                            ? "absolute left-[-40px] top-0 flex-col"
-                            : "flex-row items-center justify-center"
+                        ? "absolute left-[-40px] top-0 flex-col"
+                        : "flex-row items-center justify-center"
                         }`}
                 >
                     {colors.map((color) => (
@@ -55,8 +59,8 @@ export const DrawFlower = ({
                             key={color}
                             onClick={() => setBrushColor(color)}
                             className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${brushColor === color
-                                    ? "border-gray-800 shadow-lg scale-110"
-                                    : "border-gray-300"
+                                ? "border-gray-800 shadow-lg scale-110"
+                                : "border-gray-300"
                                 }`}
                             style={{ backgroundColor: color }}
                             title={`Select ${color}`}
@@ -75,7 +79,17 @@ export const DrawFlower = ({
                         className="border-4 border-gray-800 border-dashed rounded cursor-crosshair touch-none"
                     />
 
-                    <div className="flex gap-2 flex-col items-center">
+                    <div className="flex gap-2 flex-col items-center w-full">
+                        {/* Name input (optional) */}
+                        <input
+                            type="text"
+                            value={creatorName}
+                            onChange={(e) => onNameChange(e.target.value)}
+                            placeholder="Your name (optional)"
+                            maxLength={20}
+                            className="w-full px-3 py-1 text-sm text-center text-gray-800 border-2 border-gray-300 rounded-full focus:border-green-800 focus:outline-none bg-[#fffff3]"
+                        />
+
                         <button
                             onClick={saveDrawing}
                             disabled={isAnalyzing}

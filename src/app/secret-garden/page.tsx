@@ -71,6 +71,7 @@ export default function Garden() {
     const [displayedCaption, setDisplayedCaption] = useState("");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTyping, setIsTyping] = useState(false);
+    const [creatorName, setCreatorName] = useState("");
     const canvasRef = useRef<CanvasRef>(null);
 
     useEffect(() => {
@@ -114,6 +115,9 @@ export default function Garden() {
             const formData = new FormData();
             formData.append("file", blob);
             formData.append("probability", "1.0");
+            if (creatorName.trim()) {
+                formData.append("creatorName", creatorName.trim());
+            }
 
             const response = await fetch("/api/save-image", {
                 method: "POST",
@@ -124,7 +128,8 @@ export default function Garden() {
                 throw new Error("Failed to save flower");
             }
 
-            // Refresh the flowers list
+            // Clear name and refresh the flowers list
+            setCreatorName("");
             fetchFlowers();
         } catch (error) {
             console.error("Error during save:", error);
@@ -266,6 +271,8 @@ export default function Garden() {
                         canvasRef={canvasRef as React.RefObject<CanvasRef>}
                         isAnalyzing={isAnalyzing}
                         saveDrawing={saveDrawing}
+                        creatorName={creatorName}
+                        onNameChange={setCreatorName}
                     />
                 </div>
             </div>

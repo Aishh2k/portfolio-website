@@ -16,6 +16,7 @@ interface Drawing {
     confidence: number;
     created_at: string;
     manual_moderation?: boolean;
+    creator_name?: string;
 }
 
 const ITEMS_PER_PAGE = 200;
@@ -141,21 +142,27 @@ export default function Gallery() {
                         {flowers.map((flower) => {
                             const isLoaded = loadedFlowers.has(flower.id);
                             return (
-                                <div
-                                    key={flower.id}
-                                    className={`relative aspect-square rounded-lg overflow-hidden group w-12 h-12 cursor-pointer ${isLoaded ? "animate-growIn" : "opacity-0 scale-0"
-                                        }`}
-                                    onClick={() => console.log(flower.id)}
-                                    style={{
-                                        transformOrigin: "center bottom",
-                                    }}
-                                >
-                                    <img
-                                        src={flower.image_url}
-                                        alt={`Flower ${flower.id}`}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                        onLoad={() => handleImageLoad(flower.id)}
-                                    />
+                                <div key={flower.id} className="flex flex-col items-center">
+                                    <div
+                                        className={`relative aspect-square rounded-lg overflow-hidden group w-12 h-12 cursor-pointer ${isLoaded ? "animate-growIn" : "opacity-0 scale-0"
+                                            }`}
+                                        onClick={() => console.log(flower.id)}
+                                        style={{
+                                            transformOrigin: "center bottom",
+                                        }}
+                                    >
+                                        <img
+                                            src={flower.image_url}
+                                            alt={`Flower ${flower.id}`}
+                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                            onLoad={() => handleImageLoad(flower.id)}
+                                        />
+                                    </div>
+                                    {flower.creator_name && (
+                                        <span className="text-xs text-gray-600 mt-1 text-center max-w-12 truncate">
+                                            {flower.creator_name}
+                                        </span>
+                                    )}
                                 </div>
                             );
                         })}

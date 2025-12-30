@@ -6,6 +6,7 @@ export async function POST(request: NextRequest) {
         const formData = await request.formData();
         const file = formData.get("file") as File;
         const probability = formData.get("probability") as string;
+        const creatorName = formData.get("creatorName") as string | null;
 
         if (!file) {
             return NextResponse.json(
@@ -50,6 +51,7 @@ export async function POST(request: NextRequest) {
                 image_url: publicUrl,
                 confidence: parseFloat(probability) || 1.0,
                 ip_address: ip,
+                creator_name: creatorName || null,
             })
             .select()
             .single();
