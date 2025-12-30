@@ -209,7 +209,7 @@ export default function Garden() {
             }}
         >
             <h1 className="text-2xl md:text-4xl font-bold py-4 md:py-10 text-green-800">
-                Anna&apos;s Secret Garden
+                Aish&apos;s Secret Garden
             </h1>
 
             {/* Island background */}
@@ -284,7 +284,7 @@ export default function Garden() {
 
             {/* Gallery Link */}
             <a
-                href="/gallery"
+                href="/secret-garden/gallery"
                 className="md:fixed md:bottom-8 visible right-8 mb-10 md:mb-0 py-3 px-3 flex items-center justify-center rounded-full text-lg border border-green-800 shadow-md hover:scale-110 text-green-800 transition-transform md:z-50"
                 title="View Gallery"
             >
