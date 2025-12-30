@@ -74,7 +74,7 @@ export default function Hero() {
                         </div>
                     </div>
                     <div className="text-sm text-muted-foreground uppercase tracking-wide">
-                        Based in France
+                        Based in Atlanta, GA
                     </div>
                 </div>
             </div>
