@@ -24,7 +24,7 @@ export default function Hero() {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-[14vw] lg:text-[120px] leading-[0.85] lg:leading-[120px] font-bold uppercase tracking-tighter text-white"
                 >
-                    Frontend
+                    Fullstack
                 </motion.h1>
                 <motion.h1
                     initial={{ y: 100, opacity: 0 }}
