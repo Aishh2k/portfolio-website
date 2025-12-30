@@ -1,13 +1,13 @@
 "use client"
 
-import { ArrowUpRight } from "lucide-react"
+
 
 export default function Footer() {
     return (
         <footer className="w-full py-20 px-6 md:px-12 bg-background border-t border-border/50 text-foreground">
             <div className="flex flex-col gap-10">
                 <h2 className="text-[10vw] leading-[0.8] font-bold uppercase tracking-tighter text-center md:text-left">
-                    Let's work <br /> together
+                    Let&apos;s work <br /> together
                 </h2>
 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10 mt-10">

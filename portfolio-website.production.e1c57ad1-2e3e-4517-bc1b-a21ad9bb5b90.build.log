@@ -1,0 +1,61 @@
+2025-12-30T02:58:43.797Z	Initializing build environment...
+2025-12-30T02:58:43.797Z	Initializing build environment...
+2025-12-30T02:59:48.610Z	Success: Finished initializing build environment
+2025-12-30T02:59:49.019Z	Cloning repository...
+2025-12-30T02:59:50.512Z	Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
+2025-12-30T02:59:50.513Z	Restoring from dependencies cache
+2025-12-30T02:59:50.515Z	Restoring from build output cache
+2025-12-30T02:59:50.786Z	Installing project dependencies: npm clean-install --progress=false
+2025-12-30T02:59:54.383Z	npm warn deprecated path-match@1.2.4: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
+2025-12-30T02:59:57.811Z	npm warn deprecated @studio-freight/lenis@1.0.42: The '@studio-freight/lenis' package has been renamed to 'lenis'. Please update your dependencies: npm install lenis and visit the documentation: https://www.npmjs.com/package/lenis
+2025-12-30T02:59:58.743Z	npm warn deprecated @cloudflare/next-on-pages@1.13.16: Please use the OpenNext adapter instead: https://opennext.js.org/cloudflare
+2025-12-30T03:00:10.601Z	npm warn deprecated next@15.5.2: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/CVE-2025-66478 for more details.
+2025-12-30T03:00:27.920Z	
+2025-12-30T03:00:27.925Z	added 649 packages, and audited 650 packages in 37s
+2025-12-30T03:00:27.926Z	
+2025-12-30T03:00:27.926Z	180 packages are looking for funding
+2025-12-30T03:00:27.926Z	  run `npm fund` for details
+2025-12-30T03:00:28.059Z	
+2025-12-30T03:00:28.059Z	13 vulnerabilities (1 low, 6 moderate, 4 high, 2 critical)
+2025-12-30T03:00:28.060Z	
+2025-12-30T03:00:28.060Z	To address issues that do not require attention, run:
+2025-12-30T03:00:28.060Z	  npm audit fix
+2025-12-30T03:00:28.060Z	
+2025-12-30T03:00:28.060Z	Some issues need review, and may require choosing
+2025-12-30T03:00:28.060Z	a different dependency.
+2025-12-30T03:00:28.060Z	
+2025-12-30T03:00:28.060Z	Run `npm audit` for details.
+2025-12-30T03:00:28.291Z	Executing user build command: npm run build
+2025-12-30T03:00:28.509Z	
+2025-12-30T03:00:28.510Z	> portfolio@0.1.0 build
+2025-12-30T03:00:28.510Z	> next build
+2025-12-30T03:00:28.510Z	
+2025-12-30T03:00:29.321Z	 ⚠ Invalid next.config.ts options detected: 
+2025-12-30T03:00:29.321Z	 ⚠     Unrecognized key(s) in object: 'reactCompiler'
+2025-12-30T03:00:29.321Z	 ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+2025-12-30T03:00:29.323Z	⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+2025-12-30T03:00:29.327Z	Attention: Next.js now collects completely anonymous telemetry regarding usage.
+2025-12-30T03:00:29.328Z	This information is used to shape Next.js' roadmap and prioritize features.
+2025-12-30T03:00:29.328Z	You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-12-30T03:00:29.328Z	https://nextjs.org/telemetry
+2025-12-30T03:00:29.328Z	
+2025-12-30T03:00:29.377Z	   ▲ Next.js 15.5.2
+2025-12-30T03:00:29.377Z	
+2025-12-30T03:00:29.440Z	   Creating an optimized production build ...
+2025-12-30T03:00:40.787Z	 ✓ Compiled successfully in 8.8s
+2025-12-30T03:00:40.792Z	   Linting and checking validity of types ...
+2025-12-30T03:00:41.064Z	
+2025-12-30T03:00:41.065Z	   We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+2025-12-30T03:00:41.065Z	   The following mandatory changes were made to your tsconfig.json:
+2025-12-30T03:00:41.065Z	
+2025-12-30T03:00:41.065Z	   	- jsx was set to preserve (next.js implements its own optimized jsx transform)
+2025-12-30T03:00:41.065Z	
+2025-12-30T03:00:44.398Z	
+2025-12-30T03:00:44.402Z	Failed to compile.
+2025-12-30T03:00:44.402Z	
+2025-12-30T03:00:44.402Z	./src/components/sections/Footer.tsx
+2025-12-30T03:00:44.405Z	3:10  Warning: 'ArrowUpRight' is defined but never used.  @typescript-eslint/no-unused-vars
+2025-12-30T03:00:44.405Z	10:24  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+2025-12-30T03:00:44.405Z	
+2025-12-30T03:00:44.406Z	info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+2025-12-30T03:00:44.447Z	Failed: error occurred while running build command
