@@ -1,10 +1,18 @@
 # Project To-Do List
 
+## Visual Refinement (Priority)
+- [ ] **Header**: Move "Aiswarya Jayachandran" to Top-Left. Move "Open to Work" to Bottom-Right.
+- [ ] **Hero Typography**: Set "FRONTEND DEVELOPER" to `font-weight: 700`, `size: 120px` (or ~7.5rem), Color: `#FFFFFF` (Pure White).
+- [ ] **Scroll Down**: Change center icon to Asterisk (*). Move to Bottom-Left with breathing room.
+- [ ] **Works Section**:
+    - [ ] Set Item Height to ~150px.
+    - [ ] Set Border opacity to 10-20% (`border-white/10`).
+    - [ ] Implement Cursor Following Image interactions.
+- [ ] **Background**: Ensure pure black `#000000`, remove gradients/glows.
+
 ## Content & Assets
-- [ ] Write Bio / About Me text
-- [ ] Select 3-5 Projects to showcase
-- [ ] Prepare High-Resolution Screenshots/Images for each project
-- [ ] Update Social Media links (Url, Handle)
+- [ ] Update Name to "Aiswarya Jayachandran".
+- [ ] Update Projects with real data/images.
 
 ## Deployment / Operations
 - [ ] Purchase a Domain Name (if not already owned)
