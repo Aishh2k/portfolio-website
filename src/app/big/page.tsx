@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import Head from "next/head";
 
 export default function LargeTypePage() {
     const [text, setText] = useState("");
@@ -15,8 +14,9 @@ export default function LargeTypePage() {
     // Initialize Dark Mode and Hash Listener
     useEffect(() => {
         // Dark mode init
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-        setIsDarkMode(mediaQuery.matches);
+        if (typeof window !== "undefined") {
+            setIsDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
+        }
 
         const handleHashChange = () => {
             const hash = window.location.hash.substring(1); // remove #
@@ -53,13 +53,15 @@ export default function LargeTypePage() {
     let textWidth = 0;
 
     if (typeof window !== "undefined") { // client-side checks
-        if (window.Intl && (window.Intl as any).Segmenter) {
-            const segmenter = new (window.Intl as any).Segmenter();
+        // @ts-ignore
+        if (window.Intl && window.Intl.Segmenter) {
+            // @ts-ignore
+            const segmenter = new window.Intl.Segmenter();
             const rawSegments = Array.from(segmenter.segment(text || " "));
 
-            rawSegments.forEach((seg: any) => {
+            // @ts-ignore
+            rawSegments.forEach((seg) => {
                 segments.push(seg.segment);
-                // Width estimation
                 if (isEmoji(seg.segment)) {
                     textWidth += 1.65;
                 } else {
