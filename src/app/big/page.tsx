@@ -119,9 +119,11 @@ export default function LargeTypePage() {
             background-color: var(--bg-color); /* Apply to body */
         }
         
-        /* Reset Next.js/Tailwind bits that might conflict */
-        .large-type-wrapper-reset * {
+        /* Reset Next.js/Tailwind bits that might conflict and isolate styles */
+        .large-type-reset * {
            box-sizing: content-box; 
+           border: 0;
+           outline: 0;
         }
 
         .main-container {
@@ -311,7 +313,7 @@ export default function LargeTypePage() {
         }
       `}</style>
 
-            <div className={`main-container ${isDarkMode ? "dark-mode" : ""}`}>
+            <div className={`large-type-reset main-container ${isDarkMode ? "dark-mode" : ""}`}>
                 <div className="inputarea">
                     <input
                         ref={inputRef}
