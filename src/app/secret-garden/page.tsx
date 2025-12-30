@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 interface Flower {
@@ -19,7 +19,7 @@ export default function SecretGardenPage() {
     const [selectedColor, setSelectedColor] = useState("#FF6B6B");
     const [isPlanting, setIsPlanting] = useState(false);
     const [showGallery, setShowGallery] = useState(false);
-    const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const COLORS = ["#FF6B6B", "#FFA500", "#FFD93D", "#FF69B4", "#6BCB77"];
 
