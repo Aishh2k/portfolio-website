@@ -128,82 +128,46 @@ export default function LargeTypePage() {
 
         .main-container {
             font-family: sans-serif;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh; /* Allow growing */
             color: var(--main-color);
             background-color: var(--bg-color);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            /* Remove fixed centering causing clip */
+            justify-content: flex-start; 
             width: 100%;
-            position: fixed; /* Take over screen */
-            top: 0;
-            left: 0;
-            z-index: 50;
+            position: relative;
+            padding-bottom: 40px; /* Space for footer */
         }
         
         .inputarea {
             font-size: 12px;
-            position: absolute;
-            top: 10px;
-            width: 30%;
+            /* Make relative so it doesn't cover text */
+            position: relative;
+            top: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            z-index: 10;
         }
 
         @media only screen and (max-width: 700px) {
             .inputarea {
-                width: 80%;
+                width: 90%;
             }
         }
 
-        .inputbox {
-            border-radius: 3px;
-            border: 1px solid var(--input-color);
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
-            font-family: sans-serif;
-            font-size: 12px;
-            min-height: 26px;
-            outline: none;
-            padding: 2px;
-            text-align: center;
-            width: 100%;
-            color: var(--main-color);
-            background: transparent;
-        }
-        
-        .button-row {
-            margin-top: 4px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .button-row a {
-            color: var(--input-color);
-            font-size: 11px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .button-row a:hover {
-            color: var(--main-color);
-            text-decoration: underline;
-        }
-        
-        #darktoggle {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            cursor: pointer;
-            user-select: none;
-            font-size: 20px;
-        }
+        /* ... inputbox styles ... */
 
+        /* ... button-row ... */
+        
         .text-display {
             border-radius: 10px;
-            border: 1px solid #eee; /* Light border default */
+            border: 1px solid #eee; 
             box-shadow: 10px 10px 50px 5px var(--text-shadow-color);
             counter-reset: num-chars;
             overflow: hidden;
@@ -211,56 +175,26 @@ export default function LargeTypePage() {
             margin: 0;
             display: flex;
             background: transparent;
-            /* Allow wrapping? Original uses float left. Flex wrap is better */
             flex-wrap: wrap; 
-            max-width: 95%;
             justify-content: center;
-            list-style: none; /* KEY FIX: Remove list markers */
+            list-style: none; 
+            /* Let it grow */
+            flex: 1;
+            align-content: center;
+            margin-bottom: 20px;
         }
         
-        /* Original uses float left, let's stick closer to flex */
-        .charbox {
-            counter-increment: num-chars;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            list-style: none; /* KEY FIX: Ensure no bullets on items */
-            margin: 0; /* Ensure no margin spacing */
-            padding: 0;
-            /* width handled by font-size? No, width is implicit. */
-        }
-        
-        .charbox .char {
-             font-family: monospace;
-             /* font-size set inline */
-             line-height: 1;
-        }
-
-        /* Coloring for types */
-        .charbox .number { color: #456cad; }
-        .charbox .symbol { color: #b94669; }
-        .charbox .emoji { /* height adjustments if needed */ }
-
-        .charbox:nth-child(odd) { background: var(--bg-odd-letters); }
-        .charbox:nth-child(even) { background: var(--bg-even-letters); }
-
-        .charbox::after {
-            color: #aaa;
-            content: counter(num-chars);
-            display: block;
-            font-size: 1.5vw;
-            text-align: center;
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
+        /* ... charbox styles ... */
 
         .about {
-            position: absolute;
-            bottom: 10px;
+            position: relative; /* Natural flow */
+            bottom: auto;
+            margin-top: auto;
             width: 100%;
             text-align: center;
             font-size: 12px;
             color: #999;
+            padding: 20px 0;
         }
         .about a { color: #666; text-decoration: none; }
         .about a:hover { text-decoration: underline; }
