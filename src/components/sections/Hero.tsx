@@ -37,7 +37,7 @@ export default function Hero() {
             </div>
 
             {/* Bottom Area */}
-            <div className="flex flex-col md:flex-row justify-between items-end w-full z-10 gap-8 relative pb-[60px]">
+            <div className="flex flex-col md:flex-row justify-end items-end w-full z-10 gap-8 relative pb-[60px]">
 
                 {/* Rotating Scroll Indicator (Bottom Left) */}
                 <div className="absolute left-[60px] bottom-[60px] hidden lg:flex items-center justify-center">
