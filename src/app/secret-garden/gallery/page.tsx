@@ -2,12 +2,6 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Walter_Turncoat } from "next/font/google";
-
-const walterTurncoat = Walter_Turncoat({
-    weight: "400",
-    subsets: ["latin"],
-});
 
 interface Drawing {
     id: number;
@@ -32,13 +26,12 @@ export default function Gallery() {
     const fetchFlowers = useCallback(
         async (page: number) => {
             setLoading(true);
-            setLoadedFlowers(new Set()); // Reset loaded flowers for new page
+            setLoadedFlowers(new Set());
             try {
                 const offset = (page - 1) * ITEMS_PER_PAGE;
 
                 const { supabase } = await import("@/lib/supabase");
 
-                // Fetch the flowers for this page
                 const { data, error } = await supabase
                     .from("public_flowers")
                     .select("*")
@@ -49,7 +42,6 @@ export default function Gallery() {
                     throw error;
                 }
 
-                // Fetch the total count (only on first load or when needed)
                 if (totalCount === 0) {
                     const { count, error: countError } = await supabase
                         .from("public_flowers")
@@ -99,16 +91,15 @@ export default function Gallery() {
 
     return (
         <div
-            className={`min-h-dvh flex-grow p-8 ${walterTurncoat.className} overflow-auto`}
-            style={{ background: "#fffff3" }}
+            className="min-h-dvh flex-grow p-8 overflow-auto bg-background"
         >
             {/* Header */}
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center">
-                    <h1 className="text-4xl text-green-800">Flower Gallery</h1>
+                    <h1 className="text-4xl text-white">Flower Gallery</h1>
                     <Link
                         href="/secret-garden"
-                        className="text-green-800 hover:underline text-lg border border-green-800 px-4 py-2 rounded-full hover:scale-105 transition-transform"
+                        className="text-white hover:text-muted-foreground text-lg border border-white/30 px-4 py-2 rounded-full hover:scale-105 transition-all"
                     >
                         ← Back to Garden
                     </Link>
@@ -117,20 +108,20 @@ export default function Gallery() {
                 {/* Stats */}
                 {!loading && (
                     <div className="mb-6 flex items-center justify-between">
-                        <p className="text-gray-600">{totalCount} total flowers</p>
+                        <p className="text-muted-foreground">{totalCount} total flowers</p>
                     </div>
                 )}
 
                 {/* Loading state */}
                 {loading && (
                     <div className="text-center py-20">
-                        <p className="text-2xl text-gray-600">Loading flowers... 🌸</p>
+                        <p className="text-2xl text-muted-foreground">Loading flowers... 🌸</p>
                     </div>
                 )}
 
                 {/* Error state */}
                 {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded">
                         <p className="font-bold">Error loading flowers</p>
                         <p className="text-sm">{error}</p>
                     </div>
@@ -159,7 +150,7 @@ export default function Gallery() {
                                         />
                                     </div>
                                     {flower.creator_name && (
-                                        <span className="text-xs text-gray-600 mt-1 text-center max-w-12 truncate">
+                                        <span className="text-xs text-muted-foreground mt-1 text-center max-w-12 truncate">
                                             {flower.creator_name}
                                         </span>
                                     )}
@@ -176,21 +167,21 @@ export default function Gallery() {
                             onClick={goToPreviousPage}
                             disabled={currentPage === 1}
                             className={`px-4 py-2 rounded-full border transition-all ${currentPage === 1
-                                ? "border-gray-300 text-gray-400 cursor-not-allowed"
-                                : "border-green-800 text-green-800 hover:bg-green-800 hover:text-white"
+                                ? "border-white/20 text-muted-foreground cursor-not-allowed"
+                                : "border-white text-white hover:bg-white hover:text-black"
                                 }`}
                         >
                             ← Previous
                         </button>
-                        <span className="text-gray-600">
+                        <span className="text-muted-foreground">
                             Page {currentPage} of {totalPages}
                         </span>
                         <button
                             onClick={goToNextPage}
                             disabled={currentPage === totalPages}
                             className={`px-4 py-2 rounded-full border transition-all ${currentPage === totalPages
-                                ? "border-gray-300 text-gray-400 cursor-not-allowed"
-                                : "border-green-800 text-green-800 hover:bg-green-800 hover:text-white"
+                                ? "border-white/20 text-muted-foreground cursor-not-allowed"
+                                : "border-white text-white hover:bg-white hover:text-black"
                                 }`}
                         >
                             Next →
@@ -201,10 +192,10 @@ export default function Gallery() {
                 {/* Empty state */}
                 {!loading && !error && flowers.length === 0 && (
                     <div className="text-center py-20">
-                        <p className="text-2xl text-gray-600">No flowers yet 🌱</p>
+                        <p className="text-2xl text-muted-foreground">No flowers yet 🌱</p>
                         <Link
                             href="/secret-garden"
-                            className="text-green-800 hover:underline mt-4 inline-block"
+                            className="text-white hover:text-muted-foreground mt-4 inline-block"
                         >
                             Start planting!
                         </Link>

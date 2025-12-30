@@ -11,7 +11,7 @@ export default function Footer() {
     return (
         <footer id="contact" className="w-full py-20 px-6 md:px-12 bg-background border-t border-border/50 text-foreground">
             <div className="flex flex-col gap-10">
-                <h2 className="text-[14vw] lg:text-[120px] leading-[0.85] lg:leading-[120px] font-bold uppercase tracking-tighter text-center md:text-left">
+                <h2 className="text-[12vw] lg:text-[100px] leading-[0.85] lg:leading-[100px] font-bold uppercase tracking-tighter text-center md:text-left">
                     Let&apos;s work <br />together
                 </h2>
 
@@ -58,7 +58,7 @@ export default function Footer() {
                     <div className="flex items-center gap-2">
                         {/* Hand-drawn arrow and text */}
                         <div className="flex items-center gap-1 text-muted-foreground/70">
-                            <span className="text-xs italic font-normal normal-case tracking-normal">for my grandmom</span>
+                            <span className="text-xs italic font-normal normal-case tracking-normal">for my grandma</span>
                             {/* Hand-drawn curved arrow SVG */}
                             <svg
                                 width="40"

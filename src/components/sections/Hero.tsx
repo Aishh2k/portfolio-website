@@ -14,9 +14,13 @@ export default function Hero() {
         <section id="hero" className="h-screen w-full flex flex-col justify-between py-12 px-6 lg:px-[60px] relative overflow-hidden bg-background">
             {/* Top Bar: Name & Menu */}
             <div className="flex items-center justify-between w-full z-10">
-                <div className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
+                <a
+                    href="/Aiswarya-Jayachandran-Resume.pdf"
+                    download
+                    className="text-sm font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
+                >
                     Aiswarya Jayachandran
-                </div>
+                </a>
                 <nav className="hidden md:flex items-center gap-8">
                     {navLinks.map((link) => (
                         <a

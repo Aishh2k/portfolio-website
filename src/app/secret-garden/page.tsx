@@ -3,12 +3,6 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { CanvasRef } from "@/components/Canvas";
 import { DrawFlower } from "@/components/DrawFlower";
-import { Walter_Turncoat } from "next/font/google";
-
-const walterTurncoat = Walter_Turncoat({
-    weight: "400",
-    subsets: ["latin"],
-});
 
 interface Drawing {
     id: number;
@@ -27,7 +21,6 @@ const Flower = ({
     position: { left: string; top: string; scale: number };
     index: number;
 }) => {
-    // Generate random delay between 0 and 3 seconds
     const randomDelay = index / 10;
 
     return (
@@ -39,7 +32,7 @@ const Flower = ({
                 transform: `scale(${position.scale})`,
                 transformOrigin: "center",
                 objectFit: "cover",
-                zIndex: Math.floor(parseFloat(position.top)), // Higher z-index for lower positions
+                zIndex: Math.floor(parseFloat(position.top)),
             }}
         >
             <div
@@ -67,7 +60,7 @@ export default function Garden() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>("");
     const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [caption, setCaption] = useState(`Add flowers to our garden? `);
+    const [caption] = useState(`Add flowers to our garden?`);
     const [displayedCaption, setDisplayedCaption] = useState("");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTyping, setIsTyping] = useState(false);
@@ -78,7 +71,6 @@ export default function Garden() {
         fetchFlowers();
     }, []);
 
-    // Typing effect for caption
     useEffect(() => {
         if (caption === displayedCaption) return;
 
@@ -93,10 +85,10 @@ export default function Garden() {
                 setCurrentIndex(0);
                 setTimeout(() => clearInterval(typingInterval), 1);
             }
-        }, 50); // 50ms delay between characters
+        }, 100);
 
         return () => clearInterval(typingInterval);
-    }, [caption, displayedCaption]);
+    }, [caption, displayedCaption, currentIndex]);
 
     const saveDrawing = async () => {
         setIsAnalyzing(true);
@@ -105,7 +97,6 @@ export default function Garden() {
             const exportCanvas = canvasRef.current?.createExportCanvas();
             if (!exportCanvas) return;
 
-            // Convert canvas to blob
             const blob = await new Promise<Blob>((resolve) => {
                 exportCanvas.toBlob((blob) => {
                     resolve(blob!);
@@ -128,7 +119,6 @@ export default function Garden() {
                 throw new Error("Failed to save flower");
             }
 
-            // Clear name and refresh the flowers list
             setCreatorName("");
             fetchFlowers();
         } catch (error) {
@@ -139,10 +129,9 @@ export default function Garden() {
         }
     };
 
-    // Generate non-overlapping positions for flowers
     const generateFlowerPositions = (flowerCount: number) => {
         const positions: Array<{ left: string; top: string; scale: number }> = [];
-        const minDistance = 8; // Minimum distance between flowers (in percentage points)
+        const minDistance = 8;
 
         for (let i = 0; i < flowerCount; i++) {
             let attempts = 0;
@@ -150,19 +139,18 @@ export default function Garden() {
             let newPosition;
 
             while (!validPosition && attempts < 50) {
-                const topPercent = Math.random() * 65; // Island area (20% to 80%)
+                const topPercent = Math.random() * 65;
                 let leftPercent;
 
                 if (topPercent < 20) {
-                    leftPercent = 10 + Math.random() * 60; // Island area (20% to 80%)
+                    leftPercent = 10 + Math.random() * 60;
                 } else if (topPercent < 60) {
-                    leftPercent = 40 + Math.random() * 30; // Island area (20% to 80%)
+                    leftPercent = 40 + Math.random() * 30;
                 } else {
-                    leftPercent = 10 + Math.random() * 40; // Island area (20% to 60%)
+                    leftPercent = 10 + Math.random() * 40;
                 }
 
-                // Scale flowers based on vertical position - closer to bottom = bigger
-                const scale = 0.5 + (topPercent / 65) * 0.3; // 0.3 to 1.0 scale
+                const scale = 0.5 + (topPercent / 65) * 0.3;
 
                 newPosition = {
                     left: `${leftPercent}%`,
@@ -172,7 +160,6 @@ export default function Garden() {
                     topNum: topPercent,
                 };
 
-                // Check if this position is too close to existing positions
                 validPosition = positions.every((pos) => {
                     const existingLeft = parseFloat(pos.left);
                     const existingTop = parseFloat(pos.top);
@@ -219,38 +206,53 @@ export default function Garden() {
         }
     };
 
-    // Generate positions for flowers
     const flowerPositions = useMemo(
         () => generateFlowerPositions(flowers.length),
         [flowers.length]
     );
 
     return (
-        <div
-            className={`min-h-dvh h-full overflow-auto flex flex-col items-center justify-start relative ${walterTurncoat.className}`}
-            style={{
-                background: "#fffff3",
-            }}
-        >
-            <h1 className="text-2xl md:text-4xl font-bold py-4 md:py-10 text-green-800">
-                Aish&apos;s Secret Garden
-            </h1>
+        <section className="min-h-screen w-full flex flex-col px-6 lg:px-[60px] py-12 bg-background relative">
+            {/* Header - Name */}
+            <div className="w-full z-10 mb-4">
+                <a
+                    href="/Aiswarya-Jayachandran-Resume.pdf"
+                    download
+                    className="text-sm font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
+                >
+                    Aiswarya Jayachandran
+                </a>
+            </div>
 
-            {/* Island background */}
-            <div className="z-10 flex md:gap-28 pb-10 px-4 gap-10 flex-col md:flex-row w-full h-full justify-center items-center flex-1">
-                <div style={{ animation: "bob 3s ease-in-out infinite" }}>
+            {/* Page Subtitle - Centered */}
+            <div className="w-full text-center mb-8">
+                <span className="text-xl font-medium tracking-widest text-muted-foreground lowercase">
+                    cause you loved your flower garden
+                </span>
+            </div>
+
+            {/* Main Content - Garden and Drawing Panel side by side */}
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 w-full max-w-[1400px] mx-auto">
+
+                {/* Left Side - Island with glow */}
+                <div
+                    className="relative"
+                    style={{
+                        animation: "bob 3s ease-in-out infinite",
+                        filter: "drop-shadow(0 0 70px rgba(60, 122, 59, 0.45)) drop-shadow(0 0 110px rgba(60, 122, 59, 0.27)) brightness(0.7)"
+                    }}
+                >
                     <img
                         src="/island.png"
                         alt="Garden island"
-                        className="flex-1 max-w-full w-[600px]"
+                        className="w-[450px] lg:w-[600px] max-w-full"
                     />
 
                     {/* Flowers positioned on the island */}
                     {!loading &&
                         !error &&
                         flowers.map((flower, index) => {
-                            const position =
-                                flowerPositions[flowerPositions.length - index - 1];
+                            const position = flowerPositions[flowerPositions.length - index - 1];
                             if (!position) return null;
 
                             return (
@@ -264,6 +266,7 @@ export default function Garden() {
                         })}
                 </div>
 
+                {/* Right Side - Drawing Panel */}
                 <div className="hidden md:block">
                     <DrawFlower
                         displayedCaption={displayedCaption}
@@ -277,22 +280,29 @@ export default function Garden() {
                 </div>
             </div>
 
+            {/* Gallery link - Fixed bottom right */}
+            <a
+                href="/secret-garden/gallery"
+                className="fixed bottom-8 right-8 py-2 px-6 flex items-center justify-center gap-2 rounded-full text-sm font-medium uppercase tracking-widest border-2 border-white/40 text-muted-foreground hover:border-white hover:text-white transition-all hover:scale-105 bg-background/80 backdrop-blur-sm z-50"
+            >
+                See flower gallery
+            </a>
+
             <style jsx>{`
-        @keyframes bob {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-      `}</style>
+                @keyframes bob {
+                    0%, 100% {
+                        transform: translateY(0px);
+                    }
+                    50% {
+                        transform: translateY(-10px);
+                    }
+                }
+            `}</style>
 
             {/* Error state */}
             {error && (
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded">
                         <p className="font-bold">Error loading garden</p>
                         <p className="text-sm">{error}</p>
                     </div>
@@ -302,20 +312,11 @@ export default function Garden() {
             {/* Empty state */}
             {!loading && !error && flowers.length === 0 && (
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-                    <div className="text-center text-green-100">
+                    <div className="text-center text-muted-foreground">
                         <p className="text-4xl mb-2">🌱</p>
                     </div>
                 </div>
             )}
-
-            {/* Gallery Link */}
-            <a
-                href="/secret-garden/gallery"
-                className="md:fixed md:bottom-8 visible right-8 mb-10 md:mb-0 py-3 px-3 flex items-center justify-center rounded-full text-lg border border-green-800 shadow-md hover:scale-110 text-green-800 transition-transform md:z-50"
-                title="View Gallery"
-            >
-                🖼️ See flower gallery
-            </a>
-        </div>
+        </section>
     );
 }

@@ -175,13 +175,6 @@ const Canvas = forwardRef<CanvasRef, CanvasProps>(
                     onTouchMove={draw}
                     onTouchEnd={stopDrawing}
                 />
-                <button
-                    onClick={clearCanvas}
-                    className="absolute top-2 right-2 w-8 h-8 text-gray-600 hover:text-black rounded-full text-xl cursor-pointer transition-colors duration-200 flex items-center justify-center"
-                    title="Clear"
-                >
-                    ↺
-                </button>
             </div>
         );
     }

@@ -17,14 +17,14 @@ const projects: Project[] = [
         id: 1,
         title: "INTERACTIVE NATURAL HAZARD RISK ASSESSMENT DASHBOARD",
         category: "Data Analytics",
-        year: "2024",
+        year: "2025",
         description: "Built an interactive geospatial dashboard to analyze U.S. natural hazard risks by integrating NOAA climate data and FEMA National Risk Index. Features ML regression models for predicting fatalities and economic loss, with SHAP-based feature attribution for risk-driver analysis.",
     },
     {
         id: 2,
         title: "HEAT DIFFUSION SIMULATOR GRAPHICAL USER INTERFACE",
         category: "Simulation",
-        year: "2024",
+        year: "2025",
         description: "Developed a real-time 2D heat diffusion simulation and visualization tool using React, TypeScript, and HTML5 Canvas. Includes region/material editor with drawing tools for multi-material diffusion scenarios and configurable boundary conditions.",
     },
     {
