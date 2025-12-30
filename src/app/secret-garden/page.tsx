@@ -1,261 +1,295 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
+import { useEffect, useState, useRef, useMemo } from "react";
+import { CanvasRef } from "@/components/Canvas";
+import { DrawFlower } from "@/components/DrawFlower";
+import { Walter_Turncoat } from "next/font/google";
 
-interface Flower {
-    id: string;
-    imageUrl: string;
-    x: number;
-    y: number;
-    rotation: number;
-    createdAt: number;
+const walterTurncoat = Walter_Turncoat({
+    weight: "400",
+    subsets: ["latin"],
+});
+
+interface Drawing {
+    id: number;
+    filename: string;
+    image_url: string;
+    confidence: number;
+    created_at: string;
 }
 
-export default function SecretGardenPage() {
-    const [flowers, setFlowers] = useState<Flower[]>([]);
-    const [isDrawing, setIsDrawing] = useState(false);
-    const [currentPath, setCurrentPath] = useState<{ x: number; y: number; color: string }[]>([]);
-    const [selectedColor, setSelectedColor] = useState("#FF6B6B");
-    const [isPlanting, setIsPlanting] = useState(false);
-    const [showGallery, setShowGallery] = useState(false);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    const COLORS = ["#FF6B6B", "#FFA500", "#FFD93D", "#FF69B4", "#6BCB77"];
-
-    // Load flowers
-    useEffect(() => {
-        const stored = localStorage.getItem("secretGardenFlowers");
-        if (stored) {
-            setFlowers(JSON.parse(stored));
-        }
-    }, []);
-
-    // Initialize canvas
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        canvas.width = 200;
-        canvas.height = 200;
-        ctx.fillStyle = "#FFFEF7";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }, []);
-
-    const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const rect = canvas.getBoundingClientRect();
-        const x = "touches" in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-        const y = "touches" in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-
-        setIsDrawing(true);
-        setCurrentPath([{ x, y, color: selectedColor }]);
-    };
-
-    const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-        if (!isDrawing) return;
-
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const rect = canvas.getBoundingClientRect();
-        const x = "touches" in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-        const y = "touches" in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        ctx.strokeStyle = selectedColor;
-        ctx.lineWidth = 3;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-
-        if (currentPath.length > 0) {
-            const lastPoint = currentPath[currentPath.length - 1];
-            ctx.beginPath();
-            ctx.moveTo(lastPoint.x, lastPoint.y);
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
-
-        setCurrentPath([...currentPath, { x, y, color: selectedColor }]);
-    };
-
-    const stopDrawing = () => {
-        setIsDrawing(false);
-    };
-
-    const clearCanvas = () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        ctx.fillStyle = "#FFFEF7";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        setCurrentPath([]);
-    };
-
-    const plantFlower = () => {
-        const canvas = canvasRef.current;
-        if (!canvas || currentPath.length === 0) return;
-
-        setIsPlanting(true);
-
-        const imageData = canvas.toDataURL("image/png");
-        const newFlower: Flower = {
-            id: Date.now().toString(),
-            imageUrl: imageData,
-            x: Math.random() * 70 + 15,
-            y: Math.random() * 60 + 20,
-            rotation: Math.random() * 20 - 10,
-            createdAt: Date.now(),
-        };
-
-        const updatedFlowers = [...flowers, newFlower];
-        setFlowers(updatedFlowers);
-        localStorage.setItem("secretGardenFlowers", JSON.stringify(updatedFlowers));
-
-        setTimeout(() => {
-            setIsPlanting(false);
-            clearCanvas();
-        }, 1000);
-    };
-
-    if (showGallery) {
-        return (
-            <div className="min-h-screen bg-[#FFFEF7] p-8">
-                <div className="max-w-6xl mx-auto">
-                    <div className="flex justify-between items-center mb-8">
-                        <h1 className="text-3xl font-bold text-gray-800">{flowers.length} TOTAL FLOWERS</h1>
-                        <button
-                            onClick={() => setShowGallery(false)}
-                            className="px-6 py-2 border-2 border-gray-800 rounded-full hover:bg-gray-100 transition-colors"
-                        >
-                            ← Back to Garden
-                        </button>
-                    </div>
-                    <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-                        {flowers.map((flower) => (
-                            <div key={flower.id} className="aspect-square bg-white rounded-lg p-2 shadow-sm">
-                                <img src={flower.imageUrl} alt="Flower" className="w-full h-full object-contain" />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        );
-    }
+export const Flower = ({
+    flower,
+    position,
+    index,
+}: {
+    flower: Drawing;
+    position: { left: string; top: string; scale: number };
+    index: number;
+}) => {
+    // Generate random delay between 0 and 3 seconds
+    const randomDelay = index / 10;
 
     return (
-        <div className="min-h-screen bg-[#FFFEF7] flex items-center justify-center p-4 overflow-hidden">
-            <div className="w-full max-w-7xl flex gap-8 items-center justify-center">
-                {/* Garden Island */}
-                <div className="relative flex-1 h-[600px] flex items-center justify-center">
-                    {/* Isometric Island Background */}
-                    <div className="relative w-full h-full flex items-center justify-center">
-                        <div
-                            className="absolute w-[500px] h-[300px] bg-gradient-to-b from-green-400 to-green-600 rounded-[50%] shadow-2xl"
-                            style={{
-                                transform: "perspective(600px) rotateX(60deg)",
-                            }}
-                        />
+        <div
+            className="absolute transition-all duration-300 ease-out cursor-pointer group bottom-0 md:w-[100px] md:h-[100px] w-[75px] h-[75px]"
+            style={{
+                left: position.left,
+                top: position.top,
+                transform: `scale(${position.scale})`,
+                transformOrigin: "center",
+                objectFit: "cover",
+                zIndex: Math.floor(parseFloat(position.top)), // Higher z-index for lower positions
+            }}
+        >
+            <div
+                className="animate-growIn"
+                style={{
+                    animationDelay: `${randomDelay}s`,
+                    transform: "scale(0)",
+                    transformOrigin: "bottom",
+                }}
+                onClick={() => console.log(flower.id)}
+            >
+                <img
+                    key={flower.id}
+                    src={flower.image_url}
+                    alt={`Flower ${flower.id}`}
+                    className="group-hover:scale-125 transition-all duration-300 ease-out bottom-0 group-hover:bottom-2"
+                />
+            </div>
+        </div>
+    );
+};
 
-                        {/* Flowers */}
-                        {flowers.map((flower, index) => (
-                            <div
-                                key={flower.id}
-                                className="absolute"
-                                style={{
-                                    left: `${flower.x}%`,
-                                    top: `${flower.y}%`,
-                                    width: "80px",
-                                    height: "80px",
-                                    transform: `translate(-50%, -50%) rotate(${flower.rotation}deg)`,
-                                    animation: `float ${3 + (index % 3)}s ease-in-out infinite`,
-                                    animationDelay: `${index * 0.2}s`,
-                                }}
-                            >
-                                <img src={flower.imageUrl} alt="Flower" className="w-full h-full object-contain drop-shadow-lg" />
-                            </div>
-                        ))}
-                    </div>
+export default function Garden() {
+    const [flowers, setFlowers] = useState<Drawing[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>("");
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [caption, setCaption] = useState(`Add flowers to our garden? `);
+    const [displayedCaption, setDisplayedCaption] = useState("");
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isTyping, setIsTyping] = useState(false);
+    const canvasRef = useRef<CanvasRef>(null);
+
+    useEffect(() => {
+        fetchFlowers();
+    }, []);
+
+    // Typing effect for caption
+    useEffect(() => {
+        if (caption === displayedCaption) return;
+
+        setIsTyping(true);
+
+        const typingInterval = setInterval(() => {
+            if (currentIndex < caption.length - 1) {
+                setDisplayedCaption(caption.slice(0, currentIndex + 1));
+                setCurrentIndex(currentIndex + 1);
+            } else {
+                setIsTyping(false);
+                setCurrentIndex(0);
+                setTimeout(() => clearInterval(typingInterval), 1);
+            }
+        }, 50); // 50ms delay between characters
+
+        return () => clearInterval(typingInterval);
+    }, [caption, displayedCaption]);
+
+    const saveDrawing = async () => {
+        setIsAnalyzing(true);
+
+        try {
+            const exportCanvas = canvasRef.current?.createExportCanvas();
+            if (!exportCanvas) return;
+
+            const imageData = exportCanvas.toDataURL();
+
+            const newFlower: Drawing = {
+                id: Date.now(),
+                filename: `flower-${Date.now()}.png`,
+                image_url: imageData,
+                confidence: 1,
+                created_at: new Date().toISOString(),
+            };
+
+            const updatedFlowers = [newFlower, ...flowers];
+            setFlowers(updatedFlowers);
+            localStorage.setItem("gardenFlowers", JSON.stringify(updatedFlowers));
+        } catch (error) {
+            console.error("Error during save:", error);
+        } finally {
+            setIsAnalyzing(false);
+            canvasRef.current?.clearCanvas();
+        }
+    };
+
+    // Generate non-overlapping positions for flowers
+    const generateFlowerPositions = (flowerCount: number) => {
+        const positions: Array<{ left: string; top: string; scale: number }> = [];
+        const minDistance = 8; // Minimum distance between flowers (in percentage points)
+
+        for (let i = 0; i < flowerCount; i++) {
+            let attempts = 0;
+            let validPosition = false;
+            let newPosition;
+
+            while (!validPosition && attempts < 50) {
+                const topPercent = Math.random() * 65; // Island area (20% to 80%)
+                let leftPercent;
+
+                if (topPercent < 20) {
+                    leftPercent = 10 + Math.random() * 60; // Island area (20% to 80%)
+                } else if (topPercent < 60) {
+                    leftPercent = 40 + Math.random() * 30; // Island area (20% to 80%)
+                } else {
+                    leftPercent = 10 + Math.random() * 40; // Island area (20% to 60%)
+                }
+
+                // Scale flowers based on vertical position - closer to bottom = bigger
+                const scale = 0.5 + (topPercent / 65) * 0.3; // 0.3 to 1.0 scale
+
+                newPosition = {
+                    left: `${leftPercent}%`,
+                    top: `${topPercent}%`,
+                    scale: scale,
+                    leftNum: leftPercent,
+                    topNum: topPercent,
+                };
+
+                // Check if this position is too close to existing positions
+                validPosition = positions.every((pos) => {
+                    const existingLeft = parseFloat(pos.left);
+                    const existingTop = parseFloat(pos.top);
+                    const xDistance = Math.abs(leftPercent - existingLeft);
+                    const yDistance = Math.abs(topPercent - existingTop);
+                    return xDistance >= minDistance || yDistance >= minDistance;
+                });
+
+                attempts++;
+            }
+
+            if (newPosition) {
+                positions.push({
+                    left: newPosition.left,
+                    top: newPosition.top,
+                    scale: newPosition.scale,
+                });
+            }
+        }
+
+        return positions;
+    };
+
+    const fetchFlowers = async () => {
+        try {
+            const stored = localStorage.getItem("gardenFlowers");
+            const data = stored ? JSON.parse(stored) : [];
+            setFlowers(data || []);
+        } catch (err) {
+            console.error("Error fetching flowers:", err);
+            setError(err instanceof Error ? err.message : "Failed to fetch flowers");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Generate positions for flowers
+    const flowerPositions = useMemo(
+        () => generateFlowerPositions(flowers.length),
+        [flowers.length]
+    );
+
+    return (
+        <div
+            className={`min-h-dvh h-full overflow-auto flex flex-col items-center justify-start relative ${walterTurncoat.className}`}
+            style={{
+                background: "#fffff3",
+            }}
+        >
+            <h1 className="text-2xl md:text-4xl font-bold py-4 md:py-10 text-green-800">
+                Anna&apos;s Secret Garden
+            </h1>
+
+            {/* Island background */}
+            <div className="z-10 flex md:gap-28 pb-10 px-4 gap-10 flex-col md:flex-row w-full h-full justify-center items-center flex-1">
+                <div style={{ animation: "bob 3s ease-in-out infinite" }}>
+                    <img
+                        src="/island.png"
+                        alt="Garden island"
+                        className="flex-1 max-w-full w-[600px]"
+                    />
+
+                    {/* Flowers positioned on the island */}
+                    {!loading &&
+                        !error &&
+                        flowers.map((flower, index) => {
+                            const position =
+                                flowerPositions[flowerPositions.length - index - 1];
+                            if (!position) return null;
+
+                            return (
+                                <Flower
+                                    key={flower.id}
+                                    flower={flower}
+                                    position={position}
+                                    index={index}
+                                />
+                            );
+                        })}
                 </div>
 
-                {/* Drawing Panel */}
-                <div className="w-[280px] flex flex-col gap-4">
-                    {/* Color Palette */}
-                    <div className="flex gap-2 justify-center">
-                        {COLORS.map((color) => (
-                            <button
-                                key={color}
-                                onClick={() => setSelectedColor(color)}
-                                className={`w-10 h-10 rounded-full border-4 transition-all ${selectedColor === color ? "border-gray-800 scale-110" : "border-white"
-                                    }`}
-                                style={{ backgroundColor: color }}
-                            />
-                        ))}
-                    </div>
-
-                    {/* Canvas */}
-                    <div className="relative">
-                        <canvas
-                            ref={canvasRef}
-                            onMouseDown={startDrawing}
-                            onMouseMove={draw}
-                            onMouseUp={stopDrawing}
-                            onMouseLeave={stopDrawing}
-                            onTouchStart={startDrawing}
-                            onTouchMove={draw}
-                            onTouchEnd={stopDrawing}
-                            className="w-full h-[200px] border-2 border-dashed border-gray-400 rounded-lg cursor-crosshair touch-none bg-[#FFFEF7]"
-                        />
-                        <button
-                            onClick={clearCanvas}
-                            className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors text-lg"
-                            title="Clear"
-                        >
-                            ↺
-                        </button>
-                    </div>
-
-                    {/* Plant Button */}
-                    <button
-                        onClick={plantFlower}
-                        disabled={isPlanting || currentPath.length === 0}
-                        className="w-full py-3 border-2 border-[#6B8E23] text-[#6B8E23] rounded-full font-medium hover:bg-[#6B8E23] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {isPlanting ? "Planting..." : "🌱 Plant"}
-                    </button>
-
-                    {/* Gallery Button */}
-                    <button
-                        onClick={() => setShowGallery(true)}
-                        className="w-full py-2 text-gray-600 hover:text-gray-800 underline text-sm"
-                    >
-                        View Gallery ({flowers.length})
-                    </button>
+                <div className="hidden md:block">
+                    <DrawFlower
+                        displayedCaption={displayedCaption}
+                        isTyping={isTyping}
+                        canvasRef={canvasRef as React.RefObject<CanvasRef>}
+                        isAnalyzing={isAnalyzing}
+                        saveDrawing={saveDrawing}
+                    />
                 </div>
             </div>
 
-            {/* CSS Animations */}
-            <style jsx global>{`
-        @keyframes float {
+            <style jsx>{`
+        @keyframes bob {
           0%,
           100% {
-            transform: translate(-50%, -50%) translateY(0px) rotate(var(--rotation));
+            transform: translateY(0px);
           }
           50% {
-            transform: translate(-50%, -50%) translateY(-10px) rotate(calc(var(--rotation) + 5deg));
+            transform: translateY(-10px);
           }
         }
       `}</style>
+
+            {/* Error state */}
+            {error && (
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        <p className="font-bold">Error loading garden</p>
+                        <p className="text-sm">{error}</p>
+                    </div>
+                </div>
+            )}
+
+            {/* Empty state */}
+            {!loading && !error && flowers.length === 0 && (
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+                    <div className="text-center text-green-100">
+                        <p className="text-4xl mb-2">🌱</p>
+                    </div>
+                </div>
+            )}
+
+            {/* Gallery Link */}
+            <a
+                href="/gallery"
+                className="md:fixed md:bottom-8 visible right-8 mb-10 md:mb-0 py-3 px-3 flex items-center justify-center rounded-full text-lg border border-green-800 shadow-md hover:scale-110 text-green-800 transition-transform md:z-50"
+                title="View Gallery"
+            >
+                🖼️ See flower gallery
+            </a>
         </div>
     );
 }
