@@ -37,10 +37,10 @@ export default function Hero() {
             </div>
 
             {/* Bottom Area */}
-            <div className="flex flex-col md:flex-row justify-end items-end w-full z-10 gap-8 relative pb-[60px]">
+            <div className="flex flex-col md:flex-row justify-between items-end w-full z-10 gap-8 relative pb-[60px]">
 
                 {/* Rotating Scroll Indicator (Bottom Left) */}
-                <div className="absolute left-[60px] bottom-[60px] hidden lg:flex items-center justify-center">
+                <div className="hidden lg:flex items-center justify-center">
                     <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
@@ -57,7 +57,9 @@ export default function Hero() {
                             </text>
                         </svg>
                     </motion.div>
-                    <Asterisk className="absolute w-6 h-6 text-foreground" />
+                    <div className="absolute flex items-center justify-center w-full h-full pointer-events-none">
+                        <Asterisk className="w-6 h-6 text-foreground" />
+                    </div>
                 </div>
 
                 {/* Bottom Right: Status & Location */}
