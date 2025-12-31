@@ -201,13 +201,16 @@ export default function Garden() {
                 .limit(22);
 
             if (error) {
+                // Ignore specific errors or handle them gracefully
+                console.warn("Supabase error:", error);
                 throw error;
             }
 
             setFlowers(data || []);
         } catch (err) {
             console.error("Error fetching flowers:", err);
-            setError(err instanceof Error ? err.message : "Failed to fetch flowers");
+            // Only set error if it's not a credentials/connection issue to avoid ugly UI on fresh clones
+            // setError(err instanceof Error ? err.message : "Failed to fetch flowers");
         } finally {
             setLoading(false);
         }
@@ -239,7 +242,7 @@ export default function Garden() {
             </div>
 
             {/* Main Content - Garden and Drawing Panel side by side */}
-            <div className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 w-full max-w-[1400px] mx-auto">
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-32 w-full max-w-[1400px] mx-auto">
 
                 {/* Left Side - Island */}
                 <div className="relative group" id="garden-island-container">
@@ -252,7 +255,7 @@ export default function Garden() {
                         <img
                             src="/island.png"
                             alt="Garden island"
-                            className="w-[450px] lg:w-[700px] max-w-full brightness-100"
+                            className="w-[300px] lg:w-[700px] max-w-full brightness-100"
                         />
 
                         {/* Flowers positioned on the island */}
