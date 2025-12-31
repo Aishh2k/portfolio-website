@@ -18,7 +18,7 @@ const projects: Project[] = [
         title: "INTERACTIVE NATURAL HAZARD RISK ASSESSMENT DASHBOARD",
         category: "Data Analytics",
         year: "2025",
-        description: "Built an interactive geospatial dashboard to analyze U.S. natural hazard risks by integrating NOAA climate data and FEMA National Risk Index. Features ML regression models for predicting fatalities and economic loss, with SHAP-based feature attribution for risk-driver analysis.",
+        description: "Built an interactive geospatial dashboard to analyze U.S. natural hazard risks by integrating NOAA climate data and FEMA National Risk Index. Features ML regression models for predicting fatalities and economic loss, with SHAP- feature attribution for risk-driver analysis.",
     },
     {
         id: 2,

@@ -255,7 +255,7 @@ export default function Garden() {
                         <img
                             src="/island.png"
                             alt="Garden island"
-                            className="w-[300px] lg:w-[700px] max-w-full brightness-100"
+                            className="w-[300px] lg:w-[550px] max-w-full brightness-100"
                         />
 
                         {/* Flowers positioned on the island */}

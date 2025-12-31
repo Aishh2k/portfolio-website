@@ -1,6 +1,6 @@
 "use client"
 
-import { Mail, Phone } from "lucide-react"
+import { Heart, Mail, Phone } from "lucide-react"
 
 const socialLinks = [
     { name: "LinkedIn", href: "https://www.linkedin.com/in/aiswarya-jayachandran/" },
@@ -90,11 +90,11 @@ export default function Footer() {
                         {/* Red pulsing dot */}
                         <a
                             href="/secret-garden"
-                            className="relative flex h-3 w-3 group"
+                            className="relative flex h-5 w-5 group items-center justify-center p-0.5"
                             title="Secret Garden"
                         >
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 group-hover:bg-red-400 transition-colors"></span>
+                            <Heart className="animate-ping absolute h-full w-full text-red-400 opacity-75" fill="currentColor" strokeWidth={0} />
+                            <Heart className="relative h-full w-full text-red-500 group-hover:text-red-400 transition-colors" fill="currentColor" strokeWidth={0} />
                         </a>
                     </div>
                 </div>
