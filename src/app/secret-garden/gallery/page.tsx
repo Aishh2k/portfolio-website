@@ -90,16 +90,17 @@ export default function Gallery() {
     };
 
     return (
+
         <div
-            className="min-h-dvh flex-grow p-8 overflow-auto bg-background"
+            className="min-h-dvh flex-grow p-8 overflow-auto bg-[#fcfcfc]"
         >
             {/* Header */}
             <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between items-center">
-                    <h1 className="text-4xl text-white">Flower Gallery</h1>
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-tighter text-zinc-900">Flower Gallery</h1>
                     <Link
                         href="/secret-garden"
-                        className="text-white hover:text-muted-foreground text-lg border border-white/30 px-4 py-2 rounded-full hover:scale-105 transition-all"
+                        className="text-zinc-500 hover:text-zinc-900 text-sm font-medium tracking-widest uppercase border border-zinc-200 px-6 py-2 rounded-full hover:border-zinc-900 transition-all hover:scale-105"
                     >
                         ← Back to Garden
                     </Link>
@@ -107,15 +108,15 @@ export default function Gallery() {
 
                 {/* Stats */}
                 {!loading && (
-                    <div className="mb-6 flex items-center justify-between">
-                        <p className="text-muted-foreground">{totalCount} total flowers</p>
+                    <div className="mb-8 flex items-center justify-between">
+                        <p className="text-sm font-medium tracking-widest uppercase text-zinc-400">{totalCount} total flowers</p>
                     </div>
                 )}
 
                 {/* Loading state */}
                 {loading && (
                     <div className="text-center py-20">
-                        <p className="text-2xl text-muted-foreground">Loading flowers... 🌸</p>
+                        <p className="text-xl font-medium tracking-widest uppercase text-zinc-400">Loading flowers... 🌸</p>
                     </div>
                 )}
 
@@ -129,13 +130,13 @@ export default function Gallery() {
 
                 {/* Grid of flowers */}
                 {!loading && !error && (
-                    <div className=" flex flex-wrap gap-4">
+                    <div className="flex flex-wrap justify-start gap-6 w-full">
                         {flowers.map((flower) => {
                             const isLoaded = loadedFlowers.has(flower.id);
                             return (
-                                <div key={flower.id} className="flex flex-col items-center">
+                                <div key={flower.id} className="flex flex-col items-center group/item">
                                     <div
-                                        className={`relative aspect-square rounded-lg overflow-hidden group w-12 h-12 cursor-pointer ${isLoaded ? "animate-growIn" : "opacity-0 scale-0"
+                                        className={`relative aspect-square rounded-xl overflow-hidden w-24 h-24 cursor-pointer bg-white/50 border border-zinc-100 transition-all duration-300 hover:border-zinc-300 ${isLoaded ? "animate-growIn" : "opacity-0 scale-0"
                                             }`}
                                         onClick={() => console.log(flower.id)}
                                         style={{
@@ -145,12 +146,12 @@ export default function Gallery() {
                                         <img
                                             src={flower.image_url}
                                             alt={`Flower ${flower.id}`}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                            className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-300"
                                             onLoad={() => handleImageLoad(flower.id)}
                                         />
                                     </div>
                                     {flower.creator_name && (
-                                        <span className="text-xs text-muted-foreground mt-1 text-center max-w-12 truncate">
+                                        <span className="text-[10px] font-medium tracking-widest uppercase text-zinc-400 mt-2 text-center max-w-24 truncate opacity-0 group-hover/item:opacity-100 transition-opacity">
                                             {flower.creator_name}
                                         </span>
                                     )}
@@ -162,26 +163,26 @@ export default function Gallery() {
 
                 {/* Pagination Controls */}
                 {!loading && !error && flowers.length > 0 && totalPages > 1 && (
-                    <div className="mt-8 flex items-center justify-center gap-4">
+                    <div className="mt-12 flex items-center justify-center gap-4">
                         <button
                             onClick={goToPreviousPage}
                             disabled={currentPage === 1}
-                            className={`px-4 py-2 rounded-full border transition-all ${currentPage === 1
-                                ? "border-white/20 text-muted-foreground cursor-not-allowed"
-                                : "border-white text-white hover:bg-white hover:text-black"
+                            className={`px-6 py-2 rounded-full border text-sm font-medium tracking-widest uppercase transition-all ${currentPage === 1
+                                ? "border-zinc-100 text-zinc-300 cursor-not-allowed"
+                                : "border-zinc-300 text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
                                 }`}
                         >
                             ← Previous
                         </button>
-                        <span className="text-muted-foreground">
+                        <span className="text-sm font-medium tracking-widest uppercase text-zinc-400">
                             Page {currentPage} of {totalPages}
                         </span>
                         <button
                             onClick={goToNextPage}
                             disabled={currentPage === totalPages}
-                            className={`px-4 py-2 rounded-full border transition-all ${currentPage === totalPages
-                                ? "border-white/20 text-muted-foreground cursor-not-allowed"
-                                : "border-white text-white hover:bg-white hover:text-black"
+                            className={`px-6 py-2 rounded-full border text-sm font-medium tracking-widest uppercase transition-all ${currentPage === totalPages
+                                ? "border-zinc-100 text-zinc-300 cursor-not-allowed"
+                                : "border-zinc-300 text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
                                 }`}
                         >
                             Next →
@@ -192,10 +193,10 @@ export default function Gallery() {
                 {/* Empty state */}
                 {!loading && !error && flowers.length === 0 && (
                     <div className="text-center py-20">
-                        <p className="text-2xl text-muted-foreground">No flowers yet 🌱</p>
+                        <p className="text-xl font-medium tracking-widest uppercase text-zinc-400">No flowers yet 🌱</p>
                         <Link
                             href="/secret-garden"
-                            className="text-white hover:text-muted-foreground mt-4 inline-block"
+                            className="text-zinc-500 hover:text-zinc-900 mt-4 inline-block border-b border-zinc-300 hover:border-zinc-900 transition-colors text-sm font-medium tracking-widest uppercase"
                         >
                             Start planting!
                         </Link>

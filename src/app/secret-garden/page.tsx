@@ -124,7 +124,10 @@ export default function Garden() {
             }
 
             setCreatorName("");
-            fetchFlowers();
+            await fetchFlowers();
+
+            // Give it a moment to render the new flower before clearing
+            await new Promise(resolve => setTimeout(resolve, 500));
         } catch (error) {
             console.error("Error during save:", error);
         } finally {
@@ -216,13 +219,13 @@ export default function Garden() {
     );
 
     return (
-        <section className="min-h-screen w-full flex flex-col px-6 lg:px-[60px] py-12 bg-background relative">
+        <section className="min-h-screen w-full flex flex-col px-6 lg:px-[60px] py-12 bg-[#fcfcfc] relative">
             {/* Header - Name */}
             <div className="w-full z-10 mb-4">
                 <a
                     href="/Aiswarya-Jayachandran-Resume.pdf"
                     download
-                    className="text-sm font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm font-medium tracking-widest uppercase text-zinc-400 hover:text-zinc-900 transition-colors"
                 >
                     Aiswarya Jayachandran
                 </a>
@@ -230,7 +233,7 @@ export default function Garden() {
 
             {/* Page Subtitle - Centered */}
             <div className="w-full text-center mb-8">
-                <span className="text-xl font-medium tracking-widest text-muted-foreground lowercase">
+                <span className="text-xl font-medium tracking-widest text-zinc-500 lowercase">
                     cause you loved your flower garden
                 </span>
             </div>
@@ -238,22 +241,18 @@ export default function Garden() {
             {/* Main Content - Garden and Drawing Panel side by side */}
             <div className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 w-full max-w-[1400px] mx-auto">
 
-                {/* Left Side - Island with glow */}
+                {/* Left Side - Island */}
                 <div className="relative group" id="garden-island-container">
-                    {/* Ambient Glow Background - Reduced by 50% more */}
-                    <div className="absolute inset-0 bg-green-500/5 blur-[80px] rounded-full scale-150 animate-pulse pointer-events-none" />
-
                     <div
                         className="relative"
                         style={{
                             animation: "bob 3s ease-in-out infinite",
-                            filter: "drop-shadow(0 0 30px rgba(74, 222, 128, 0.12))"
                         }}
                     >
                         <img
                             src="/island.png"
                             alt="Garden island"
-                            className="w-[450px] lg:w-[700px] max-w-full brightness-90 drop-shadow-[0_0_15px_rgba(74, 222, 128, 0.07)]"
+                            className="w-[450px] lg:w-[700px] max-w-full brightness-100"
                         />
 
                         {/* Flowers positioned on the island */}
@@ -276,7 +275,7 @@ export default function Garden() {
                 </div>
 
                 {/* Right Side - Drawing Panel */}
-                <div className="hidden md:block">
+                <div>
                     <DrawFlower
                         displayedCaption={displayedCaption}
                         isTyping={isTyping}
@@ -292,7 +291,7 @@ export default function Garden() {
             {/* Gallery link - Fixed bottom right */}
             <a
                 href="/secret-garden/gallery"
-                className="fixed bottom-8 right-8 py-2 px-6 flex items-center justify-center gap-2 rounded-full text-sm font-medium uppercase tracking-widest border-2 border-white/40 text-muted-foreground hover:border-white hover:text-white transition-all hover:scale-105 bg-background/80 backdrop-blur-sm z-50"
+                className="fixed bottom-8 right-8 py-2 px-6 flex items-center justify-center gap-2 rounded-full text-sm font-medium uppercase tracking-widest border-2 border-zinc-200 text-zinc-500 hover:border-zinc-900 hover:text-zinc-900 transition-all hover:scale-105 bg-white/80 backdrop-blur-sm z-50"
             >
                 See flower gallery
             </a>

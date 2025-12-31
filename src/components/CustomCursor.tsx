@@ -74,7 +74,7 @@ export default function CustomCursor() {
         }
 
         const setupListeners = () => {
-            const interactiveElements = document.querySelectorAll('a, button, [role="button"], input, textarea, select')
+            const interactiveElements = document.querySelectorAll('a, button, [role="button"], input, textarea, select:not(canvas)')
             interactiveElements.forEach(addListenersToElement)
             return interactiveElements
         }
@@ -96,6 +96,21 @@ export default function CustomCursor() {
         }
     }, [isTouchDevice])
 
+    // Check if hovering over canvas
+    const [isCanvasHover, setIsCanvasHover] = useState(false)
+
+    useEffect(() => {
+        const handleCanvasEnter = (e: MouseEvent) => {
+            if ((e.target as HTMLElement).tagName === 'CANVAS') {
+                setIsCanvasHover(true)
+            } else {
+                setIsCanvasHover(false)
+            }
+        }
+        window.addEventListener('mouseover', handleCanvasEnter)
+        return () => window.removeEventListener('mouseover', handleCanvasEnter)
+    }, [])
+
     // Don't render on touch devices
     if (isTouchDevice) {
         return null
@@ -113,7 +128,7 @@ export default function CustomCursor() {
                     translateY: "-50%",
                 }}
                 animate={{
-                    opacity: isVisible ? 1 : 0,
+                    opacity: isVisible && !isCanvasHover ? 1 : 0,
                     scale: isHovering ? 0.5 : 1,
                 }}
                 transition={{ duration: 0.15 }}
@@ -129,7 +144,7 @@ export default function CustomCursor() {
                     translateY: "-50%",
                 }}
                 animate={{
-                    opacity: isVisible ? 1 : 0,
+                    opacity: isVisible && !isCanvasHover ? 1 : 0,
                     scale: isHovering ? 1.5 : 1,
                 }}
                 transition={{ duration: 0.2 }}
