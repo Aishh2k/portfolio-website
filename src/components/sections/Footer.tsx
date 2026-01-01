@@ -5,6 +5,7 @@ import { Heart, Mail, Phone } from "lucide-react"
 const socialLinks = [
     { name: "LinkedIn", href: "https://www.linkedin.com/in/aiswarya-jayachandran/" },
     { name: "GitHub", href: "https://github.com/Aishh2k" },
+    { name: "Resume", href: "/Aiswarya-Jayachandran-Resume.pdf", download: true },
 ]
 
 export default function Footer() {
@@ -45,6 +46,7 @@ export default function Footer() {
                                 href={social.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                download={social.download}
                                 className="text-sm font-medium uppercase tracking-widest hover:text-muted-foreground transition-colors"
                             >
                                 {social.name}

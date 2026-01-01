@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useMemo } from "react";
+import Link from "next/link";
 import { CanvasRef } from "@/components/Canvas";
 import { DrawFlower } from "@/components/DrawFlower";
 
@@ -225,13 +226,12 @@ export default function Garden() {
         <section className="min-h-screen w-full flex flex-col px-6 lg:px-[60px] py-12 bg-[#fcfcfc] relative">
             {/* Header - Name */}
             <div className="w-full z-10 mb-4">
-                <a
-                    href="/Aiswarya-Jayachandran-Resume.pdf"
-                    download
+                <Link
+                    href="/"
                     className="text-sm font-medium tracking-widest uppercase text-zinc-400 hover:text-zinc-900 transition-colors"
                 >
                     Aiswarya Jayachandran
-                </a>
+                </Link>
             </div>
 
             {/* Page Subtitle - Centered */}
