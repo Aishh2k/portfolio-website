@@ -116,7 +116,7 @@ export default function Gallery() {
                 {/* Loading state */}
                 {loading && (
                     <div className="text-center py-20">
-                        <p className="text-xl font-medium tracking-widest uppercase text-zinc-400">Loading flowers... 🌸</p>
+                        <p className="text-xl font-medium tracking-widest text-zinc-400">loading flowers... 🌸</p>
                     </div>
                 )}
 
