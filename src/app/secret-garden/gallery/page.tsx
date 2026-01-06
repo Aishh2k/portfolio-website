@@ -92,7 +92,7 @@ export default function Gallery() {
     return (
 
         <div
-            className="min-h-dvh flex-grow p-8 overflow-auto bg-[#fcfcfc]"
+            className="min-h-dvh flex-grow p-8 overflow-auto bg-background"
         >
             {/* Header */}
             <div className="max-w-7xl mx-auto">

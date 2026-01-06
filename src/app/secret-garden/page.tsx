@@ -223,7 +223,7 @@ export default function Garden() {
     );
 
     return (
-        <section className="min-h-screen w-full flex flex-col px-6 lg:px-[60px] py-12 bg-[#fcfcfc] relative">
+        <section className="min-h-screen w-full flex flex-col px-6 lg:px-[60px] py-12 bg-white relative">
             {/* Header - Name */}
             <div className="w-full z-10 mb-4">
                 <Link

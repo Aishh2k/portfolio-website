@@ -16,8 +16,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Digital Designer & Developer Portfolio",
+  title: "Aiswarya Jayachandran - Software Developer",
+  description: "Software Developer Portfolio",
+  icons: {
+    icon: "/favicon/icons8-a-pulsar-line-96.png",
+    shortcut: "/favicon/icons8-a-pulsar-line-96.png",
+    apple: "/favicon/icons8-a-pulsar-line-96.png",
+  },
+  openGraph: {
+    title: "Aiswarya Jayachandran - Software Developer",
+    description: "Software Developer Portfolio",
+    type: "website",
+    siteName: "Aiswarya Jayachandran",
+  },
 };
 
 export default function RootLayout({
